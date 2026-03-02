@@ -1,8 +1,8 @@
-import { CacheType, ChannelType, Interaction, MessageFlags } from "discord.js"
-import { raids } from "../data/raids.js"
-import { findBestCIMatch } from "../utils/string.js"
-import { client } from "../bot.js"
+import { CacheType, ChannelType, Interaction, MessageFlags } from 'discord.js'
+import { findBestCIMatch } from '../utils/string.js'
 import { sendToLogChannel } from '../utils/discord.js'
+import { raids } from '../data/raids.js'
+import { client } from '../bot.js'
 
 export function onInteractionCreate(interaction: Interaction<CacheType>) {
 	if (!interaction.channel || interaction.channel.type === ChannelType.DM) return
@@ -10,7 +10,10 @@ export function onInteractionCreate(interaction: Interaction<CacheType>) {
 	if (interaction.isCommand()) {
 		const command = client.commands.get(interaction.commandName)
 		if (command) {
-			sendToLogChannel(`:scroll:  **${interaction.user.tag}** ran the command \`${interaction.commandName}\` in **${interaction.guild?.name ?? 'Direct Messages'}** (${interaction.guildId ?? interaction.channelId})`)
+			const logMessage = `:scroll:  **${interaction.user.username}** (${interaction.user.id}) ran the command \`${interaction.commandName}\` in **${interaction.guild?.name ?? 'Direct Messages'}** (${interaction.guildId ?? interaction.channelId})`
+			const commandData = interaction.isChatInputCommand() ? JSON.stringify(interaction.options, null, "\t") : undefined
+			sendToLogChannel(logMessage, commandData)
+			
 			command.execute(interaction)
 		} else {
 			interaction.reply({

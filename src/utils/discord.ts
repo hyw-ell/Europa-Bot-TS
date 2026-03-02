@@ -1,25 +1,26 @@
 import { MessagePayload, MessageCreateOptions, TextChannel, PermissionFlagsBits, REST, Routes, Client } from 'discord.js'
-import { client, HOME_SHARD_ID } from '../bot.js'
 import { readdirSync } from 'fs'
-import { Command } from '../classes/BotClient.js'
 import { BOT_TOKEN, BOT_ID, HOME_SERVER_ID, CHANNEL_IDS } from '../data/discord.js'
+import { client, HOME_SHARD_ID } from '../bot.js'
+import { Command } from '../classes/BotClient.js'
 
 export async function sendToChannel(channelID: string, message: string | MessagePayload | MessageCreateOptions) {
     const channel = await client.channels.fetch(channelID) as TextChannel
     if (channel) channel.send(message)
 }
 
-export async function sendToLogChannel(logMessage: string) {
+export async function sendToLogChannel(message: string, commandData?: string) {
     const options = {
         shard: HOME_SHARD_ID,
-        context: {
-            logChannelID: CHANNEL_IDS.COMMAND_LOG,
-            message: logMessage
-        }
+        context: { logChannelID: CHANNEL_IDS.COMMAND_LOG, message, commandData }
     }
 
-    client.shard?.broadcastEval((client: Client, { logChannelID, message } : typeof options.context ) => {
-        (client.channels.cache.get(logChannelID) as TextChannel).send(message)
+    client.shard?.broadcastEval((client: Client, { logChannelID, message, commandData } : typeof options.context ) => {
+        const logChannel = client.channels.cache.get(logChannelID) as TextChannel
+        logChannel.send({
+            content: message,
+            files: commandData ? [{ attachment: Buffer.from(commandData), name: 'options.json' }] : undefined
+        })
     }, options)
 }
 
