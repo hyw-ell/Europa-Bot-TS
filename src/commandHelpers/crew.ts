@@ -1,7 +1,7 @@
 import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { browser, startPuppeteer } from "../bot.js"
-import { formatList } from "./string.js"
+import { formatList } from "../utils/string.js"
 import { languageCookie, accessCookie } from "../data/granblue.js"
+import { browser, startPuppeteer } from '../utils/browser.js'
 
 export interface crew {data: {is_seed: number | string, points: number | string, gw_num: number | string, rank: number | string, name: string}[], id: number}
 export async function loadCrew(interaction: ChatInputCommandInteraction, crew: crew){
@@ -24,7 +24,7 @@ export async function loadCrew(interaction: ChatInputCommandInteraction, crew: c
 
     await page.waitForSelector('#wrapper > div.contents > div.cnt-guild > div.prt-airship-image > img', {visible: true})
     await page.evaluate((crewID) => {
-        document.getElementsByClassName('prt-head-current')[0].setAttribute('style', 'font-size: 14pxpadding-top: 4px')
+        document.getElementsByClassName('prt-head-current')[0].setAttribute('style', 'font-size: 14px; padding-top: 4px')
         document.getElementsByClassName('prt-head-current')[0].textContent += ` ID: ${crewID}`
     }, crew.id)
 

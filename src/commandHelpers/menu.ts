@@ -1,4 +1,5 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, ComponentType, ChatInputCommandInteraction } from 'discord.js'
+import { MILLISECONDS } from '../data/time.js'
 
 /**
  * Displays a menu with an embedded message, navigation buttons, and a select box.
@@ -67,13 +68,13 @@ export async function showMenu(interaction: ChatInputCommandInteraction, userInp
     const choiceCollector = (await interaction.fetchReply()).createMessageComponentCollector({
         componentType: ComponentType.StringSelect, 
         filter: async i => i.member?.user.id === interaction.member?.user.id && i.message.id === interactionReplyID, 
-        idle: 60000, 
+        idle: MILLISECONDS.MINUTE, 
         max: 1
     })
     const buttonCollector = (await interaction.fetchReply()).createMessageComponentCollector({
         componentType: ComponentType.Button,
         filter: async i => i.member?.user.id === interaction.member?.user.id && i.message.id === interactionReplyID,
-        idle: 60000
+        idle: MILLISECONDS.MINUTE
     })
     buttonCollector?.on('collect', i => {
         i.deferUpdate()

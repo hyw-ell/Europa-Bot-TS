@@ -1,87 +1,107 @@
-import { Image, loadImage } from 'canvas'
-import { readdirSync } from 'fs'
-import { currentShardID } from '../bot.js'
+// export let playerTemplate: Image
+// export let summonsTemplate: Image
+// export let privateSummon: Image
+// export let openSummon: Image
+// export let regularStar: Image
+// export let blankRegularStar: Image
+// export let blueStar: Image
+// export let blankBlueStar: Image
+// export let transcendenceStars: Image[]
+// export let perpetuityRingIcon: Image
 
-export let playerTemplate: Image
-export let summonsTemplate: Image
-export let privateSummon: Image
-export let openSummon: Image
-export let regularStar: Image
-export let blankRegularStar: Image
-export let blueStar: Image
-export let blankBlueStar: Image
-export let transcendenceStars: Image[]
-export let perpetuityRingIcon: Image
+// export let eventsBackgroundTop: Image
+// export let eventsBackgroundMiddle: Image
+// export let eventsBackgroundBottom: Image
+// export let upcomingEventsText: Image
 
-export let eventsBackgroundTop: Image
-export let eventsBackgroundMiddle: Image
-export let eventsBackgroundBottom: Image
-export let upcomingEventsText: Image
+// export let fireAdvantage: Image
+// export let waterAdvantage: Image
+// export let earthAdvantage: Image
+// export let windAdvantage: Image
+// export let lightAdvantage: Image
+// export let darkAdvantage: Image
 
-export let fireAdvantage: Image
-export let waterAdvantage: Image
-export let earthAdvantage: Image
-export let windAdvantage: Image
-export let lightAdvantage: Image
-export let darkAdvantage: Image
+// export let sparkBGMask: Image
+// export let clearSparkBG: Image
+// export let clearMBSparkBG: Image
+// export let defaultSparkBG: Image
+// export let defaultMBSparkBG: Image
+// export let developerTitle: Image
+// export let VIPTitle: Image
+// export let progressBars: Image[]
 
-export let sparkBGMask: Image
-export let clearSparkBG: Image
-export let clearMBSparkBG: Image
-export let defaultSparkBG: Image
-export let defaultMBSparkBG: Image
-export let developerTitle: Image
-export let VIPTitle: Image
-export let progressBars: Image[]
+// export let skydomWallpaper: Image
+// export async function loadAssets(){
+//     const assetPaths = readdirSync('assets/').filter(asset => /.png/i.test(asset))
+//     const loadedAssets = await Promise.all(assetPaths.map(asset => loadImage(`assets/${asset}`)))
+//     const assets = Object.fromEntries(loadedAssets.map((asset, i) => [String(assetPaths[i].match(/[^.]+/)), asset]));
 
-export let skydomWallpaper: Image
-export async function loadAssets(){
-    const assetPaths = readdirSync('assets/').filter(asset => /.png/i.test(asset))
-    const loadedAssets = await Promise.all(assetPaths.map(asset => loadImage(`assets/${asset}`)))
-    const assets = Object.fromEntries(loadedAssets.map((asset, i) => [String(assetPaths[i].match(/[^.]+/)), asset]));
+//     playerTemplate = images['Player_Template.png']
+//     summonsTemplate = images['Support_Summmons_Template.png']
+//     privateSummon = images['Private_Support_Summon.png']
+//     openSummon = images['Open_Support_Summon.png']
+//     regularStar = images['Uncap_Star.png']
+//     blankRegularStar = images['Uncap_Star_Blank.png']
+//     blueStar = images['Blue_Uncap_Star.png']
+//     blankBlueStar = images['Blue_Uncap_Star_Blank.png']
+//     transcendenceStars = [
+//         images['Transcendence_Star_0.png'],
+//         images['Transcendence_Star_1.png'],
+//         images['Transcendence_Star_2.png'],
+//         images['Transcendence_Star_3.png'],
+//         images['Transcendence_Star_4.png'],
+//         images['Transcendence_Star_5.png'],
+//         images['Transcendence_Star_Blank.png']
+//     ]
+//     perpetuityRingIcon = images['Perpetuity_Ring_Icon.png']
+//     eventsBackgroundTop = images['Events_Background_Top.png']
+//     eventsBackgroundMiddle = images['Events_Background_Middle.png']
+//     eventsBackgroundBottom = images['Events_Background_Bottom.png']
+//     upcomingEventsText = images['Upcoming_Events_Text.png']
+//     fireAdvantage = images['Fire_Advantage.png']
+//     waterAdvantage = images['Water_Advantage.png']
+//     earthAdvantage = images['Earth_Advantage.png']
+//     windAdvantage = images['Wind_Advantage.png']
+//     lightAdvantage = images['Light_Advantage.png']
+//     darkAdvantage = images['Dark_Advantage.png']
+//     sparkBGMask = images['Spark_Template_Background_Mask.png']
+//     clearSparkBG = images['Spark_Template_Translucent_BG.png']
+//     clearMBSparkBG = images['Spark_Template_Translucent_BG_with_MobaCoin.png']
+//     defaultSparkBG = images['Spark_Template.png']
+//     defaultMBSparkBG = images['Spark_Template_with_MobaCoin.png']
+//     developerTitle = images['Developer_Title.png']
+//     VIPTitle = images['VIP_Title.png']
+//     progressBars = [
+//         images['Progress_Bar_1.png'],
+//         images['Progress_Bar_2.png'],
+//         images['Progress_Bar_3.png'],
+//         images['Progress_Bar_4.png'],
+//         images['Progress_Bar_5.png'],
+//         images['Progress_Bar_6.png'],
+//     ]
+//     skydomWallpaper = images['Skydom_Wallpaper.png']
+// }
 
-    playerTemplate = assets['Player Template']
-    summonsTemplate = assets['Support Summons Template']
-    privateSummon = assets['Private Support Summon']
-    openSummon = assets['Open Support Summon']
-    regularStar = assets['Uncap Star']
-    blankRegularStar = assets['Uncap Star Blank']
-    blueStar = assets['Blue Uncap Star']
-    blankBlueStar = assets['Blue Uncap Star Blank']
-    transcendenceStars = [
-        assets['Transcendence Star 0'],
-        assets['Transcendence Star 1'],
-        assets['Transcendence Star 2'],
-        assets['Transcendence Star 3'],
-        assets['Transcendence Star 4'],
-        assets['Transcendence Star 5'],
-        assets['Transcendence Star Blank']
-    ]
-    perpetuityRingIcon = assets['Perpetuity Ring Icon']
-    eventsBackgroundTop = assets['Events Background Top']
-    eventsBackgroundMiddle = assets['Events Background Middle']
-    eventsBackgroundBottom = assets['Events Background Bottom']
-    upcomingEventsText = assets['Upcoming Events Text']
-    fireAdvantage = assets['Fire Advantage']
-    waterAdvantage = assets['Water Advantage']
-    earthAdvantage = assets['Earth Advantage']
-    windAdvantage = assets['Wind Advantage']
-    lightAdvantage = assets['Light Advantage']
-    darkAdvantage = assets['Dark Advantage']
-    sparkBGMask = assets['Spark Template Background Mask']
-    clearSparkBG = assets['Spark Template Translucent BG']
-    clearMBSparkBG = assets['Spark Template Translucent BG with MobaCoin']
-    defaultSparkBG = assets['Spark Template']
-    defaultMBSparkBG = assets['Spark Template with MobaCoin']
-    developerTitle = assets['Developer Title']
-    VIPTitle = assets['VIP Title']
-    progressBars = [
-        assets['Progress Bar 1'],
-        assets['Progress Bar 2'],
-        assets['Progress Bar 3'],
-        assets['Progress Bar 4'],
-        assets['Progress Bar 5'],
-        assets['Progress Bar 6'],
-    ]
-    skydomWallpaper = assets['Skydom Wallpaper']
-}
+import { loadImage } from 'canvas'
+import { AttachmentBuilder } from 'discord.js'
+import { getAllFilePaths } from '../utils/filesystem.js'
+import path from 'path'
+
+const pngFilePaths = getAllFilePaths('./assets', 'png')
+
+// const attachmentFilePaths = pngFilePaths.filter(f => /Misc_Icons|Infographics|Difficulty_Icons|Shard_Icons/.test(f))
+const imageFilePaths = pngFilePaths.filter(f => /Misc|Events|Icons|Player|Spark/.test(f))
+
+const imagePromises = imageFilePaths.map(f => loadImage(f))
+const resolvedImages = await Promise.all(imagePromises)
+
+// export const attachments = Object.fromEntries(
+//     attachmentFilePaths.map(filePath => {
+//         const fileName = path.basename(filePath)
+//         return [fileName, new AttachmentBuilder(filePath, { name: fileName })]
+//     })
+// )
+
+export const images = Object.fromEntries(
+    imageFilePaths.map((filePath, index) => [path.basename(filePath), resolvedImages[index]])
+)

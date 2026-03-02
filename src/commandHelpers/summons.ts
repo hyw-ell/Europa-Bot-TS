@@ -1,9 +1,10 @@
-import { createCanvas } from 'canvas'
 import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js'
-import { browser, fontFallBacks, startPuppeteer } from '../bot.js'
-import { summonsTemplate } from '../data/assets.js'
+import { fontFallBacks } from '../bot.js'
 import { getAllSummonInfo, drawStars } from './granblue.js'
-import { languageCookie, accessCookie } from "../data/granblue.js"
+import { languageCookie, accessCookie } from '../data/granblue.js'
+import { browser, startPuppeteer } from '../utils/browser.js'
+import { images } from '../data/assets.js'
+import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export async function loadSummons(interaction: ChatInputCommandInteraction, playerID: string){
     const playerEmbed = new EmbedBuilder()
@@ -37,10 +38,10 @@ export async function loadSummons(interaction: ChatInputCommandInteraction, play
     const rank = bodyHTML.match(/(?<=\sRank\s)\d+/)
 
 	// Draw player name, ID, and template
-	const canvas = createCanvas(1540, 475)
-	const ctx = canvas.getContext('2d')
+	const canvas = new EnhancedCanvas(1540, 475)
+	const ctx = canvas.ctx
 
-	ctx.drawImage(summonsTemplate, 0, 0)
+	ctx.drawImage(images['Support_Summons_Template.png'], 0, 0)
 
 	ctx.textAlign = 'center'
 	ctx.font = `35px Default Bold ${fontFallBacks}`

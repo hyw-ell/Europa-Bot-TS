@@ -4,8 +4,9 @@ import { compareTwoStrings } from 'string-similarity'
 import axios from 'axios'
 import urlencode from 'urlencode'
 import { database } from '../data/database.js'
-import { blankBlueStar, blankRegularStar, blueStar, privateSummon, regularStar, transcendenceStars } from '../data/assets.js'
 import { showMenu } from './menu.js'
+import { images } from '../data/assets.js'
+import { isNumber } from '../utils/number.js'
 
 /**
  * Parses raw HTML and returns an array containing information for each support summon the player has set.
@@ -58,7 +59,7 @@ export async function getAllSummonInfo(rawHtml: string){
         }
 
         summons.push({
-            image: privateSummon,
+            image: images['Private_Support_Summon.png'],
             level: level,
             uncaps: uncaps,
             maxUncaps: maxUncaps
@@ -97,12 +98,12 @@ export function drawStars(ctx: CanvasRenderingContext2D, spacing: number, size: 
         let star: Image
 
         if (maxUncaps === 6) {
-            star = i <= uncaps ? transcendenceStars[5] : transcendenceStars[6]
+            star = i <= uncaps ? images['Transcendence_Star_5.png'] : images['Transcendence_Star_Blank.png']
         } else {
             if (i <= 3) {
-                star = i <= uncaps ? regularStar : blankRegularStar
+                star = i <= uncaps ? images['Uncap_Star.png'] : images['Uncap_Star_Blank.png']
             } else {
-                star = i <= uncaps ? blueStar : blankBlueStar
+                star = i <= uncaps ? images['Blue_Uncap_Star.png'] : images['Blue_Uncap_Star_Blank.png']
             }
         }
 
@@ -125,7 +126,10 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
             name: 'Player Search',
             iconURL: 'https://upload.wikimedia.org/wikipedia/en/e/e5/Granblue_Fantasy_logo.png'
         })
-        .setFooter({text: 'https://gbfdata.com/', iconURL: 'https://raw.githubusercontent.com/Cryotalis/Europa-Bot-TS/refs/heads/main/assets/gbfdata%20Icon.png'})
+        .setFooter({
+            text: 'https://gbfdata.com/',
+            iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/refs/heads/main/assets/gbfdata%20Icon.png'
+        })
 
     await interaction.editReply({embeds: [searchEmbed]})
     
@@ -153,5 +157,5 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
     const formattedPlayers = players.map(player => `${player.name} Rank ${player.level} (${player.userid})`)
 
     const userChoice = await showMenu(interaction, playerName, formattedPlayers)
-    return userChoice ? players[userChoice].userid : undefined
+    return isNumber(userChoice) ? players[userChoice].userid : undefined
 }

@@ -1,10 +1,10 @@
-import { EmbedBuilder } from "discord.js"
-import { findBestCIMatch, titleize } from "./string.js"
-import { weaponEmotes, rarityEmotes } from "../data/variables.js"
-import { item, bannerData } from "./banner.js"
-import { database } from "../data/database.js"
+import { EmbedBuilder } from 'discord.js'
+import { findBestCIMatch, titleize } from '../utils/string.js'
+import { weaponEmotes, rarityEmotes } from '../data/granblue.js'
+import { database } from '../data/database.js'
+import { item, bannerData } from '../data/banner.js'
 
-export function gacha(crystals: number, singles: number, tenparts: number, target?: item, modifier?: "gachapin" | "mukku" | "super mukku"){
+export function gacha(crystals: number, singles: number, tenparts: number, target?: item, modifier?: "gachapin" | "mukku" | "super mukku") {
     /**
      * Change the SSR rate
      * 
@@ -118,7 +118,7 @@ export function createGachaEmbed(items: item[], target?: item, modifier?: "gacha
     return rollEmbed
 }
 
-export function findTarget(target: string){
+export function findTarget(target: string) {
     const bannerItemNames = bannerData.items.map(item => item.name)
     const bannerCharacterNames = bannerData.items.map(item => item.character).filter(c => c)
     const characterNames = database.characters.map(char => char.get('name')).filter(c => c)

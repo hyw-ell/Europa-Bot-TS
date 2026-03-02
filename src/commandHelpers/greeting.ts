@@ -1,7 +1,8 @@
 import { AttachmentBuilder, User } from 'discord.js'
-import { createCanvas, loadImage } from 'canvas'
-import { skydomWallpaper } from '../data/assets.js'
+import { loadImage } from 'canvas'
 import { fontFallBacks } from '../bot.js'
+import { images } from '../data/assets.js'
+import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export type toggleableGreetingSetting = 'sendJoinMessage' | 'sendLeaveMessage' | 'sendBanMessage' | 'showJoinImage' | 'useAutoRole';
 
@@ -23,10 +24,10 @@ export interface greetingConfig {
  * Generates an image with a background, user avatar, and welcome message
  */
 export async function makeGreetingImage(greetingSettings: greetingConfig, user: User){
-    const canvas = createCanvas(700, 250)
-	const ctx = canvas.getContext('2d')
+    const canvas = new EnhancedCanvas(700, 250)
+	const ctx = canvas.ctx
 	
-	const background = greetingSettings.background ? await loadImage(greetingSettings.background) : skydomWallpaper
+	const background = greetingSettings.background ? await loadImage(greetingSettings.background) : images['Skydom_Wallpaper.png']
 	const avatar = await loadImage(user.displayAvatarURL({extension: 'png', size: 4096, forceStatic: true}))
 
 	ctx.drawImage(background, 0, 0, canvas.width, canvas.height)

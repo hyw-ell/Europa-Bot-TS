@@ -1,32 +1,41 @@
-import { createCanvas, loadImage, Image } from "canvas"
-import { AttachmentBuilder, EmbedBuilder, GuildMember, User } from "discord.js"
-import { GoogleSpreadsheetRow } from "google-spreadsheet"
-import { fontFallBacks } from "../bot.js"
-import { sparkBGMask, clearSparkBG, defaultSparkBG, progressBars, developerTitle, VIPTitle, clearMBSparkBG, defaultMBSparkBG } from "../data/assets.js"
-import { formatList } from "./string.js"
-import { round } from "./number.js"
-import { userData } from "../data/database.js"
+import { loadImage, Image } from 'canvas'
+import { AttachmentBuilder, EmbedBuilder, GuildMember, User } from 'discord.js'
+import { GoogleSpreadsheetRow } from 'google-spreadsheet'
+import { fontFallBacks } from '../bot.js'
+import { formatList } from '../utils/string.js'
+import { round } from '../utils/number.js'
+import { userData } from '../data/database.js'
+import { images } from '../data/assets.js'
+import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUser: User) {
-    const canvas = createCanvas(500, 300)
-    const ctx = canvas.getContext('2d')
+    const canvas = new EnhancedCanvas(500, 300)
+    const ctx = canvas.ctx
     
-    const {crystals, mobaCoin, tickets, tenParts, rolls, background, sparkTitle} = user.toObject() as userData
+    const { crystals, mobaCoin, tickets, tenParts, rolls, background, sparkTitle } = user.toObject() as userData
     let customBackground: Image | undefined
 
     if (background) customBackground = await loadImage(background).catch(() => undefined)
 
     if (customBackground){
-        ctx.drawImage(sparkBGMask, 0, 0)
+        ctx.drawImage(images['Spark_Template_Background_Mask.png'], 0, 0)
         ctx.globalCompositeOperation = 'source-in'
         ctx.drawImage(customBackground, 0, 0, canvas.width, canvas.height)
         ctx.globalCompositeOperation = 'source-over'
-        ctx.drawImage(+mobaCoin ? clearMBSparkBG : clearSparkBG, 0, 0)
+        ctx.drawImage(+mobaCoin ? images['Spark_Template_Translucent_BG_with_MobaCoin.png'] : images['Spark_Template_Translucent_BG.png'], 0, 0)
     } else {
-        ctx.drawImage(+mobaCoin ? defaultMBSparkBG : defaultSparkBG, 0, 0)
+        ctx.drawImage(+mobaCoin ? images['Spark_Template_with_MobaCoin.png'] : images['Spark_Template.png'], 0, 0)
     }
     
-    const sparkPercent = calcDraws(user, false)/300
+    const sparkPercent = calcDraws(user, false) / 300
+    const progressBars = [
+        images['Progress_Bar_1.png'],
+        images['Progress_Bar_2.png'],
+        images['Progress_Bar_3.png'],
+        images['Progress_Bar_4.png'],
+        images['Progress_Bar_5.png'],
+        images['Progress_Bar_6.png'],
+    ]
     if (Math.floor(sparkPercent)-1 >= 0) ctx.drawImage(progressBars[Math.floor(sparkPercent)-1] ?? progressBars[progressBars.length-1], 0, 0) // Draw a full length progress bar if the user has 1 whole spark or more
     if (sparkPercent > 0){ // Draw a portion of a progress bar according to the user's spark percentage
         ctx.drawImage(progressBars[Math.ceil(sparkPercent)-1] ?? progressBars[progressBars.length-1], 0, 0, 35+424*(sparkPercent % 1), canvas.height, 0, 0, 35+424*(sparkPercent % 1), canvas.height)
@@ -47,8 +56,8 @@ export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUs
     ctx.fillText(discordUser.displayName, 318, 95)
 
     switch (sparkTitle?.toLowerCase()) {
-        case 'developer': ctx.drawImage(developerTitle, 270, 122); break
-        case 'vip': ctx.drawImage(VIPTitle, 302, 122); break
+        case 'developer': ctx.drawImage(images['Developer_Title.png'], 270, 122); break
+        case 'vip': ctx.drawImage(images['VIP_Title.png'], 302, 122); break
     }
     
     ctx.font = `24px Default ${fontFallBacks}`
@@ -76,7 +85,7 @@ export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUs
     ctx.closePath()
     ctx.clip()
 
-    const avatarURL = (discordUser).displayAvatarURL({extension: 'png', forceStatic: true})
+    const avatarURL = (discordUser).displayAvatarURL({ extension: 'png', forceStatic: true })
     const avatar = await loadImage(avatarURL)
     ctx.drawImage(avatar, 55, 40, 100, 100)
     ctx.restore()
@@ -84,14 +93,12 @@ export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUs
     // For Halloween
     // const cobwebs = await loadImage('https://media.discordapp.net/attachments/647256353844232202/1033487287662690434/SparkProfileCobwebs.png')
     // ctx.drawImage(cobwebs, 0, 0)
-    
-    const attachment = new AttachmentBuilder(canvas.toBuffer(), {name: `${discordUser.displayName}SparkProfile.png`})
-    
-    if (background && !customBackground){ // If the user's custom background caused an error, send a warning.
-        return {content: 'I could not access your background image. Please make sure your background image is publicly accessible.', files: [attachment]}
+
+    // If the user's custom background caused an error, send a warning.
+    return {
+        content: (background && !customBackground) ? 'I could not access your background image. Please make sure your background image is publicly accessible.' : undefined,
+        files: [new AttachmentBuilder(canvas.toBuffer(), { name: `${discordUser.displayName}SparkProfile.png` })]
     }
-    
-    return {files: [attachment]}
 }
 
 export function getEmbedProfile(user: GoogleSpreadsheetRow<userData>, discordUser: GuildMember) {
@@ -106,10 +113,10 @@ export function getEmbedProfile(user: GoogleSpreadsheetRow<userData>, discordUse
         .setTitle(`${discordUser.displayName}'s Spark Progress`)
 
     if (discordUser.presence?.clientStatus?.mobile){
-        for (let i = 0; i < 4 - crystals.length / 2; i++) {crystalBlank += blank}
-        for (let i = 0; i < 6 - tickets.length / 2; i++) {ticketBlank += blank}
-        for (let i = 0; i < 5 - tenParts.length / 2; i++) {tenticketBlank += blank}
-        for (let i = 0; i < 14 - rolls.length / 2; i++) {sparkBlank += blank}
+        for (let i = 0; i < 4 - crystals.length / 2; i++) { crystalBlank += blank }
+        for (let i = 0; i < 6 - tickets.length / 2; i++)  { ticketBlank += blank }
+        for (let i = 0; i < 5 - tenParts.length / 2; i++) { tenticketBlank += blank }
+        for (let i = 0; i < 14 - rolls.length / 2; i++)   { sparkBlank += blank }
         
         sparkEmbed
             .addFields([
@@ -117,28 +124,28 @@ export function getEmbedProfile(user: GoogleSpreadsheetRow<userData>, discordUse
                     name: '<:Crystal:616792937161949189> Crystals:⠀   ⠀<:Ticket:616792937254092800> Tickets:⠀   ⠀<:10Ticket:616792937220669450> 10 Parts:', 
                     value: `${crystalBlank + crystals + crystalBlank}${ticketBlank + tickets + ticketBlank}${tenticketBlank + tenParts}`
                 },
-                {name: '⠀⠀⠀⠀⠀⠀⠀⠀⠀<:Spark:622196123695710208> Rolls/Sparks:', value: sparkBlank + rolls, inline: false},
-                {name: `⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:585534348695044199>`, value: `⠀[${progBar}]`}
+                { name: '⠀⠀⠀⠀⠀⠀⠀⠀⠀<:Spark:622196123695710208> Rolls/Sparks:', value: sparkBlank + rolls, inline: false },
+                { name: `⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:585534348695044199>`, value: `⠀[${progBar}]` }
             ])
     } else {
-        for (let i = 0; i < 6 - crystals.length / 2; i++) {crystalBlank += blank}
-        for (let i = 0; i < 8 - tickets.length / 2; i++) {ticketBlank += blank}
-        for (let i = 0; i < 7 - tenParts.length / 2; i++) {tenticketBlank += blank}
-        for (let i = 0; i < 8 - rolls.length / 2; i++) {sparkBlank += blank}
+        for (let i = 0; i < 6 - crystals.length / 2; i++) { crystalBlank += blank }
+        for (let i = 0; i < 8 - tickets.length / 2; i++)  { ticketBlank += blank }
+        for (let i = 0; i < 7 - tenParts.length / 2; i++) { tenticketBlank += blank }
+        for (let i = 0; i < 8 - rolls.length / 2; i++)    { sparkBlank += blank }
         
         sparkEmbed
             .addFields([
-                {name: '⠀⠀<:Crystal:616792937161949189> Crystals:', value: crystalBlank + crystals, inline: true},
-                {name: '⠀⠀⠀⠀<:Ticket:616792937254092800> Tickets:', value: ticketBlank + tickets, inline: true},
-                {name: '⠀<:10Ticket:616792937220669450> 10 Part Tickets: ⠀', value: tenticketBlank + tenParts, inline: true},
-                {name: '\u200B', value: '\u200B', inline: true},
-                {name: '⠀⠀<:Spark:622196123695710208> Rolls/Sparks:', value: sparkBlank + rolls, inline: true},
-                {name: '\u200B', value: '\u200B', inline: true},
-                {name: `⠀⠀⠀⠀⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:585534348695044199>`, value: `⠀ ⠀ ⠀⠀[${progBar}]`}
+                { name: '⠀⠀<:Crystal:616792937161949189> Crystals:', value: crystalBlank + crystals, inline: true },
+                { name: '⠀⠀⠀⠀<:Ticket:616792937254092800> Tickets:', value: ticketBlank + tickets, inline: true },
+                { name: '⠀<:10Ticket:616792937220669450> 10 Part Tickets: ⠀', value: tenticketBlank + tenParts, inline: true },
+                { name: '\u200B', value: '\u200B', inline: true },
+                { name: '⠀⠀<:Spark:622196123695710208> Rolls/Sparks:', value: sparkBlank + rolls, inline: true },
+                { name: '\u200B', value: '\u200B', inline: true },
+                { name: `⠀⠀⠀⠀⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:585534348695044199>`, value: `⠀ ⠀ ⠀⠀[${progBar}]` }
             ])
     }
 
-    return {embeds: [sparkEmbed]}
+    return { embeds: [sparkEmbed] }
 }
 
 export function calcDraws(user: GoogleSpreadsheetRow<userData>, round: boolean = true){
@@ -186,5 +193,8 @@ export function manageSpark(user: GoogleSpreadsheetRow<userData>, operation: str
     if (operation !== 'set') operation += 'ed'
     user.set('rolls', String(calcDraws(user)))
     const rolls = calcDraws(user)
-    return {errorMsg: '', summary: `${formatList(resourceArr)} ${operation}. You now have ${rolls} draws (${rolls >= initialRolls ? '+' : ''}${rolls - initialRolls}).`}
+    return {
+        errorMsg: '',
+        summary: `${formatList(resourceArr)} ${operation}. You now have ${rolls} draws (${rolls >= initialRolls ? '+' : ''}${rolls - initialRolls}).`
+    }
 }

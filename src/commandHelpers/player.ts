@@ -1,18 +1,20 @@
-import { createCanvas, loadImage } from "canvas"
-import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { browser, fontFallBacks, startPuppeteer } from "../bot.js"
-import { playerTemplate, openSummon, perpetuityRingIcon } from "../data/assets.js"
-import { getAllSummonInfo, drawStars } from "./granblue.js"
-import { wrapText } from "./image.js"
-import { languageCookie, accessCookie } from "../data/granblue.js"
-import { decode } from "html-entities"
+import { loadImage } from 'canvas'
+import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js'
+import { fontFallBacks } from '../bot.js'
+import { getAllSummonInfo, drawStars } from './granblue.js'
+import { languageCookie, accessCookie } from '../data/granblue.js'
+import { decode } from 'html-entities'
+import { MILLISECONDS } from '../data/time.js'
+import { browser, startPuppeteer } from '../utils/browser.js'
+import { images } from '../data/assets.js'
+import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export async function loadProfile(interaction: ChatInputCommandInteraction, playerID: string) {
     const playerEmbed = new EmbedBuilder()
         .setColor('Blue')
         .setAuthor({name: 'Player Search', iconURL: 'https://upload.wikimedia.org/wikipedia/en/e/e5/Granblue_Fantasy_logo.png'})
         .setTitle('Fetching Player Profile <a:loading:763160594974244874>')
-    interaction.editReply({embeds: [playerEmbed], components: []})
+    interaction.editReply({ embeds: [playerEmbed], components: [] })
 
     // Access the Player profile page
     if (!browser?.connected) await startPuppeteer()
@@ -30,7 +32,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
         return await page.close()
     }
 
-    await page.waitForSelector('#wrapper > div.contents > div.cnt-profile > div.prt-status', { timeout: 10000 }).catch(async () => {
+    await page.waitForSelector('#wrapper > div.contents > div.cnt-profile > div.prt-status', { timeout: 10 * MILLISECONDS.SECOND }).catch(async () => {
         await interaction.editReply({content: 'Could not connect to Granblue Fantasy. Please try again later.', embeds: []})
         await page.close()
     })
@@ -52,16 +54,20 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
     }, playerID)
     
     // Take a screenshot of the page and close the page
-    const screenshot = await page.screenshot({clip: { x: 0, y: 52, width: 362, height: 520 }, encoding: 'binary', omitBackground: true})
+    const screenshot = await page.screenshot({
+        clip: { x: 0, y: 52, width: 362, height: 520 },
+        encoding: 'binary',
+        omitBackground: true
+    })
     page.close()
     
     // Draw Player profile, template, and Star Character
-    const canvas = createCanvas(810, 520)
-    const ctx = canvas.getContext('2d')
+    const canvas = new EnhancedCanvas(810, 520)
+    const ctx = canvas.ctx
 
     const playerProfile = await loadImage(Buffer.from(screenshot))
     ctx.drawImage(playerProfile, 0, 0)
-    ctx.drawImage(playerTemplate, 350, 0)
+    ctx.drawImage(images['Player_Template.png'], 350, 0)
     
     // Fetch/compile summon info and draw summons with uncap stars
     ctx.shadowColor = '#000000'
@@ -86,14 +92,18 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
     let emLvl = String(bodyHTML.match(/(?<=txt-npc-rank">)\d+(?=<)/))
     let starCharText = decode(String(bodyHTML.match(/(?<=prt-pushed-info">).+?(?=<)/s)))
     let starCharImage
-    if (starCharURL.includes('empty.jpg')){starCharImage = openSummon; starCharName = 'Not Set'; emLvl = 'N/A'}
-    else if (starCharPrivate){starCharName = 'Private'; emLvl = 'N/A'; starCharText = 'Private' }
+    if (starCharURL.includes('empty.jpg')) {
+        starCharImage = images['Open_Support_Summon.png']
+        starCharName = 'Not Set'
+        emLvl = 'N/A'
+    }
+    else if (starCharPrivate) { starCharName = 'Private'; emLvl = 'N/A'; starCharText = 'Private' }
     else starCharImage = await loadImage(starCharURL)
 
-    if (starCharImage) ctx.drawImage(starCharImage, 400, 410, 105, 60)
+    if (starCharImage) { ctx.drawImage(starCharImage, 400, 410, 105, 60) }
 
-    ctx.textAlign = 'center'
     ctx.font = `20px Default Bold ${fontFallBacks}`
+    ctx.textAlign = 'center'
     ctx.fillStyle = 'white'
     ctx.lineWidth = 2
 
@@ -107,17 +117,22 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
     ctx.strokeText(`${starCharName}`, 580, 390)
     ctx.fillText(`${starCharName}`, 580, 390)
 
-    wrapText({ctx: ctx, font: '18px Default', textAlign: 'left'}, `${starCharText}`, 525, 427, 240, 15)
+    ctx.font = `18px Default ${fontFallBacks}`
+    ctx.textAlign = 'left'
+    canvas.wrapText(`${starCharText}`, 525, 427, 240, 15)
 
-    if (starCharRinged) ctx.drawImage(perpetuityRingIcon, 460, 409, 22, 22)
+    if (starCharRinged) ctx.drawImage(images['Perpetuity_Ring_Icon.png'], 460, 409, 22, 22)
 
-    const attachment = new AttachmentBuilder(canvas.toBuffer(), {name: `Player_${playerID}.png`})
+    const attachment = new AttachmentBuilder(canvas.toBuffer(), { name: `Player_${playerID}.png` })
 
     playerEmbed
         .setTitle(`${name}`)
         .setURL(`http://game.granbluefantasy.jp/#profile/${playerID}`)
         .setImage(`attachment://${attachment.name}`)
-        .setFooter({text: `http://game.granbluefantasy.jp/#profile/${playerID}`, iconURL: 'http://game.granbluefantasy.jp/favicon.ico'})
+        .setFooter({
+            text: `http://game.granbluefantasy.jp/#profile/${playerID}`,
+            iconURL: 'http://game.granbluefantasy.jp/favicon.ico'
+        })
 
-    interaction.editReply({embeds: [playerEmbed], files: [attachment]})
+    interaction.editReply({ embeds: [playerEmbed], files: [attachment] })
 }

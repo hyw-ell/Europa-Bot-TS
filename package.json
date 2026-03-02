@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Cryotalis/Europa-Bot-TS.git"
+    "url": "git+https://github.com/hyw-ell/Europa-Bot-TS.git"
   },
   "keywords": [],
   "author": "Hywell",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Cryotalis/Europa-Bot-TS/issues"
+    "url": "https://github.com/hyw-ell/Europa-Bot-TS/issues"
   },
-  "homepage": "https://github.com/Cryotalis/Europa-Bot-TS#readme",
+  "homepage": "https://github.com/hyw-ell/Europa-Bot-TS#readme",
   "dependencies": {
     "@google-cloud/translate": "^9.3.0",
     "axios": "^1.13.2",
