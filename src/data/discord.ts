@@ -1,6 +1,6 @@
 export const BOT_OWNER_ID = '251458435554607114'
 const DEV_ID = '631961435051917362'
-const PROD_ID = '521180443958181889'
+const PROD_ID = '585514230967566338'
 
 const devMode = process.env.DEV_MODE === 'true'
 export const BOT_ID = devMode ? DEV_ID : PROD_ID
