@@ -10,7 +10,7 @@ export interface greetingConfig {
 	joinMessage: string,
 	leaveMessage: string,
 	banMessage: string,
-	channelID: string,
+	channelID: string | null,
 	background: string | null,
 	autoRoles: string[],
 	sendJoinMessage: boolean,
@@ -23,12 +23,12 @@ export interface greetingConfig {
 /**
  * Generates an image with a background, user avatar, and welcome message
  */
-export async function makeGreetingImage(greetingSettings: greetingConfig, user: User){
+export async function makeGreetingImage(greetingSettings: greetingConfig, user: User) {
     const canvas = new EnhancedCanvas(700, 250)
 	const ctx = canvas.ctx
 	
 	const background = greetingSettings.background ? await loadImage(greetingSettings.background) : images['Skydom_Wallpaper.png']
-	const avatar = await loadImage(user.displayAvatarURL({extension: 'png', size: 4096, forceStatic: true}))
+	const avatar = await loadImage(user.displayAvatarURL({ extension: 'png', size: 4096, forceStatic: true }))
 
 	ctx.drawImage(background, 0, 0, canvas.width, canvas.height)
 	ctx.fillStyle = '#e3deda'
@@ -56,5 +56,5 @@ export async function makeGreetingImage(greetingSettings: greetingConfig, user: 
 	
 	ctx.drawImage(avatar, 25, 25, 200, 200)
 
-	return new AttachmentBuilder(canvas.toBuffer(), {name: 'welcome.png'})
+	return new AttachmentBuilder(canvas.toBuffer(), { name: 'welcome.png' })
 }

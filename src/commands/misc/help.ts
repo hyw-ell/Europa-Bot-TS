@@ -10,7 +10,7 @@ export const command = {
 			.setColor('Blue')
 			.setTitle('About Europa')
 			.setDescription('The complete list of commands for Europa can be found [here](https://hyw-ell.github.io/Europa/commands.html).')
-			.setThumbnail('https://i.imgur.com/f0MfwDw.png')
+			.setThumbnail('https://i.imgur.com/f0MfwDw.png') // TODO Use local attachment
 			.addFields([{name: '\u200b', value: 'If you want to talk to my creator about anything, please join the [support server](https://discord.gg/YtwzVSp).'}])
     	return interaction.reply({embeds: [helpEmbed]})
 	}

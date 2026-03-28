@@ -21,7 +21,7 @@ export const command = {
 				.setDescription('**__CURRENT AND UPCOMING EVENTS__**')
 				.setURL('https://gbf.wiki/Main_Page')
 				.setColor('Blue')
-				.setFooter({ text: 'https://gbf.wiki/Main_Page', iconURL: 'https://i.imgur.com/MN6TIHj.png' })
+				.setFooter({ text: 'https://gbf.wiki/Main_Page', iconURL: 'https://i.imgur.com/MN6TIHj.png' }) // TODO Use local attachment
 			
 			currentEvents.forEach(event => eventEmbed.addFields([{
 				name: event.title + (event.elementAdvantage ? ` (${event.elementAdvantage})` : ''),

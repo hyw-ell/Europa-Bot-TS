@@ -92,7 +92,7 @@ export function createGachaEmbed(items: item[], target?: item, modifier?: "gacha
     if (modifier) gachaTitle = gachaTitle.replace(':__', ` from ${titleize(modifier)} Frenzy:__`)
 
     const rollEmbed = new EmbedBuilder()
-        .setAuthor({name: 'Gacha Simulator', iconURL: 'https://i.imgur.com/MN6TIHj.png'})
+        .setAuthor({ name: 'Gacha Simulator', iconURL: 'https://i.imgur.com/MN6TIHj.png' }) // TODO Use local attachment
         .setTitle(gachaTitle)
         .setColor('Blue')
     

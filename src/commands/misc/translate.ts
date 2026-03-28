@@ -44,7 +44,7 @@ export const command = {
 				{ name: `Input (${sourceLang?.name ?? detectedSourceLang})`, value: textInput },
 				{ name: `Output (${outputLang.name})`, value: translation.translatedText }
 			])
-			.setFooter({ text: 'Google Translate', iconURL: 'https://i.imgur.com/vcZDlz7.png' })
+			.setFooter({ text: 'Google Translate', iconURL: 'https://i.imgur.com/vcZDlz7.png' }) // TODO Use local attachment
 		
 		interaction.editReply({ embeds: [translateEmbed] })
 	}

@@ -13,9 +13,9 @@ export const command = {
 		const rand = Math.floor(Math.random() * Math.floor(choices?.length!))
 
 		const choiceEmbed = new EmbedBuilder()
-			.setAuthor({iconURL: 'https://i.imgur.com/63S2bZB.png', name: 'Choices: ' + formatList(choices)})
+			.setAuthor({ iconURL: 'https://i.imgur.com/63S2bZB.png', name: 'Choices: ' + formatList(choices) }) // TODO Use local attachment
 			.setDescription(`<@${interaction.user.id}>, I choose **${String(choices[rand])}**`)
 			.setColor('Blue')
-		interaction.reply({embeds: [choiceEmbed]})
+		interaction.reply({ embeds: [choiceEmbed] })
 	}
 }

@@ -37,20 +37,24 @@ export const command = {
 
 		const raidEmbed = new EmbedBuilder()
 			.setAuthor({
-				iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/main/assets/Raid%20Icon.png',
+				iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/main/assets/Raid%20Icon.png', // TODO Use local attachment
 				name: raidName ?? raidRole?.name ?? 'Unknown Raid',
 			})
 			.setDescription(message)
 			.setTitle(raidCode)
 			.setColor('Blue')
 
-		if (time) 			 raidEmbed.addFields({name: 'Time Remaining', value: `Ends <t:${Math.trunc(new Date().getTime() / 1000 + time! * 60)}:R>`, inline: true})
-		if (hp || hpPercent) raidEmbed.addFields({name: 'Boss HP', value: (hp && hpPercent) ? `${hp} [${hpPercent}%]` : (hp ?? hpPercent + '%'), inline: true})
-		if (participants) 	 raidEmbed.addFields({name: 'Participants', value: participants, inline: true})
+		if (time) 			 raidEmbed.addFields({ name: 'Time Remaining', value: `Ends <t:${Math.trunc(new Date().getTime() / 1000 + time! * 60)}:R>`, inline: true })
+		if (hp || hpPercent) raidEmbed.addFields({ name: 'Boss HP', value: (hp && hpPercent) ? `${hp} [${hpPercent}%]` : (hp ?? hpPercent + '%'), inline: true })
+		if (participants) 	 raidEmbed.addFields({ name: 'Participants', value: participants, inline: true })
 		if (questID) 		 raidEmbed.setThumbnail(`https://prd-game-a1-granbluefantasy.akamaized.net/assets_en/img/sp/quest/assets/lobby/${questID}.png`)
 		if (!(raidName && time && hp && hpPercent && participants && questID)) raidEmbed.addFields({name: '\u200B', value: '❗ For best results, use the associated [bookmarklet](https://hyw-ell.github.io/Demo/bookmarklets.html).'})
 		
-		await interaction.reply({content: raidRole ? '### ' + String(raidRole) : undefined, embeds: [raidEmbed], allowedMentions: {roles: raidRole ? [raidRole.id] : undefined}})
+		await interaction.reply({
+			content: raidRole ? '### ' + String(raidRole) : undefined,
+			embeds: [raidEmbed],
+			allowedMentions: { roles: raidRole ? [raidRole.id] : undefined }
+		})
 		await interaction.followUp(raidCode)
 	}
 }

@@ -162,7 +162,7 @@ export function manageSpark(user: GoogleSpreadsheetRow<userData>, operation: str
     if (tickets !== null) resourceArr.push('Tickets')
     if (tenParts !== null) resourceArr.push('10-Part Tickets')
 
-    if (!resourceArr.length) return {errorMsg: `You must choose a resource to ${operation}!`, summary: ''}
+    if (!resourceArr.length) return { errorMsg: `You must choose a resource to ${operation}!`, summary: '' }
 
     const userCrystals = parseInt(user.get('crystals'))
     const userMobaCoin = parseInt(user.get('mobaCoin'))

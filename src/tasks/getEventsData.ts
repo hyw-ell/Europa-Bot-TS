@@ -85,7 +85,7 @@ async function processEvents(events: rawEvent[]): Promise<gbfEvent[]> {
         let imgName, imgHash, imgURL = null
 
         if (event.name === 'Maintenance') {
-            imgURL = 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/main/assets/Maintenance%20Event.png'
+            imgURL = 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/main/assets/Events/Maintenance_Event.png'
         } else if (event.image) {
             imgName = decode(capFirstLetter(event.image).replace(/ /g, '_').replace(/__/g, '_'))
             imgHash = md5(imgName)

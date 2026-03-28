@@ -5,7 +5,9 @@ import { client, HOME_SHARD_ID } from '../bot.js'
 import { Command } from '../classes/BotClient.js'
 
 export async function sendToChannel(channelID: string, message: string | MessagePayload | MessageCreateOptions) {
-    const channel = await client.channels.fetch(channelID) as TextChannel
+    const channel = await client.channels.fetch(channelID).catch(() => {
+        throw new Error(`Could not fetch channel for ID: ${channelID}`)
+    }) as TextChannel | null
     if (channel) channel.send(message)
 }
 

@@ -16,11 +16,11 @@ export const command = {
 
 		const answerEmbed = new EmbedBuilder()
 			.setAuthor({
-				iconURL: 'https://i.imgur.com/0wLgnwS.png',
+				iconURL: 'https://i.imgur.com/0wLgnwS.png', // TODO Use local attachment
 				name: 'Question: ' + question + (/\?$/.test(question) ? '' : '?')
 			})
 			.setDescription(`<@${interaction.user.id}> ${answers[rand]}`)
 			.setColor('Blue')
-		await interaction.reply({embeds: [answerEmbed]})
+		await interaction.reply({ embeds: [answerEmbed] })
 	}
 }

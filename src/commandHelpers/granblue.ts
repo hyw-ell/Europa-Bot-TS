@@ -128,10 +128,10 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
         })
         .setFooter({
             text: 'https://gbfdata.com/',
-            iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/refs/heads/main/assets/gbfdata%20Icon.png'
+            iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/refs/heads/main/assets/gbfdata%20Icon.png' // TODO use local attachment
         })
 
-    await interaction.editReply({embeds: [searchEmbed]})
+    await interaction.editReply({ embeds: [searchEmbed] })
     
     // Search https://gbfdata.com for players
     let players = await axios.get(`https://gbfdata.com/user/search?q=${urlencode(playerName)}&is_fulltext=1`).then(({data}) => {
@@ -150,7 +150,7 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
         return
     }
     
-    if (players.length === 1) return players[0].userid
+    if (players.length === 1) { return players[0].userid }
 
     players.sort((a, b) => parseInt(b.level) - parseInt(a.level))
     players.sort((a, b) => compareTwoStrings(b.name, playerName) - compareTwoStrings(a.name, playerName))
