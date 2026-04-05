@@ -10,6 +10,9 @@ export const command = {
 		.addBooleanOption(option => option.setName('detailed').setDescription('Show non-SSR items'))
 	,
 	async execute(interaction: ChatInputCommandInteraction) {
+		await interaction.reply(`This command has been temporarily disabled because as of <t:1774861200:s>, GBF now requires authentication to fetch banner-related information. Please wait while my creator explores possible solutions.`)
+		return
+
 		const includeNonSSRItems = interaction.options.getBoolean('detailed')
 		const includedRarities = includeNonSSRItems ? ['SS Rare', 'S Rare', 'Rare'] : ['SS Rare']
 		const {start, end, drawRates, featuredItemIDs} = bannerData.bannerInfo

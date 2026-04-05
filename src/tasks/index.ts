@@ -23,13 +23,13 @@ export async function runStartupTasks() {
         connectDatabase(),
     ])
 
-    getBannerData()
+    // getBannerData()
     registerCommands()
     await getEventsData()
     makeEventsTemplate()
 
     schedule('0 * * * *', async () => {
-        getBannerData()
+        // getBannerData()
         connectDatabase()
         
         await getEventsData()
