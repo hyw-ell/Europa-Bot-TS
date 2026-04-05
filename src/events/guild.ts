@@ -37,7 +37,7 @@ export async function onGuildMemberAdd(member: GuildMember) {
 		})
 	}
 	
-	if (sendJoinMessage) {
+	if (sendJoinMessage && channelID) {
 		sendToChannel(channelID, {
 			content: joinMessage.replace('[member]', String(member)),
 			files: showJoinImage ? [await makeGreetingImage(greetingSettings, member.user)] : []
@@ -54,11 +54,14 @@ export async function onGuildMemberRemove(member: GuildMember | PartialGuildMemb
 
 	const greetingSettings: greetingConfig = JSON.parse(server.get('greeting'))
     const { channelID, leaveMessage, banMessage, sendLeaveMessage, sendBanMessage } = greetingSettings
-	const userIsBanned = await member.guild.bans.fetch(member.user).catch(() => false)
-	
-	if (userIsBanned) {
-        if (sendBanMessage) sendToChannel(channelID, banMessage.replace('[member]', member.user.username))
+	if (!channelID) return
+
+	const userBan = await member.guild.bans.fetch(member.user).catch(() => null)
+	const userInfo = `${member.nickname || member.user.displayName} (${member.user.username})`
+
+	if (userBan) {
+        if (sendBanMessage) sendToChannel(channelID, banMessage.replace('[member]', userInfo))
     } else {
-        if (sendLeaveMessage) sendToChannel(channelID, leaveMessage.replace('[member]', member.user.username))
+        if (sendLeaveMessage) sendToChannel(channelID, leaveMessage.replace('[member]', userInfo))
     }
 }
