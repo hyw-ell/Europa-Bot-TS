@@ -1,6 +1,6 @@
-import { ChatInputCommandInteraction, EmbedBuilder, GuildBasedChannel, GuildMember, Role, SlashCommandBuilder } from 'discord.js'
+import { channelMention, ChannelType, ChatInputCommandInteraction, EmbedBuilder, GuildMember, InteractionContextType, Role, SlashCommandBuilder } from 'discord.js'
 import { getImageLink, uploadImage } from '../../utils/image.js'
-import { findBestCIMatch, titleize } from '../../utils/string.js'
+import { formatList, titleize } from '../../utils/string.js'
 import { greetingConfig, makeGreetingImage, toggleableGreetingSetting } from '../../commandHelpers/greeting.js'
 import { database } from '../../data/database.js'
 
@@ -8,6 +8,7 @@ export const command = {
 	data: new SlashCommandBuilder()
 		.setName('greeting')
 		.setDescription('Manage settings for the greeting system')
+		.setContexts(InteractionContextType.Guild)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('toggle')
@@ -17,11 +18,11 @@ export const command = {
 						.setName('setting')
 						.setDescription('The setting to toggle on or off')
 						.addChoices(
-							{name: 'Join Message', value: 'sendJoinMessage'},
-							{name: 'Leave Message', value: 'sendLeaveMessage'},
-							{name: 'Ban Message', value: 'sendBanMessage'},
-							{name: 'Join Image', value: 'showJoinImage'},
-							{name: 'AutoRole', value: 'useAutoRole'}
+							{ name: 'Join Message', value: 'sendJoinMessage' },
+							{ name: 'Leave Message', value: 'sendLeaveMessage' },
+							{ name: 'Ban Message', value: 'sendBanMessage' },
+							{ name: 'Join Image', value: 'showJoinImage' },
+							{ name: 'AutoRole', value: 'useAutoRole' }
 						)
 						.setRequired(true)
 				)
@@ -30,25 +31,31 @@ export const command = {
 			subcommand
 				.setName('join-message')
 				.setDescription('Set the message to be sent when someone joins the server')
-				.addStringOption(option => option.setName('message').setDescription('Tip: Include [member] in your message to mention the user.').setRequired(true))	
+				.addStringOption(option => option.setName('message').setDescription('Tip: Include [member] in your message to mention the user.').setRequired(true))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
 				.setName('leave-message')
 				.setDescription('Set the message to be sent when someone leaves the server')
-				.addStringOption(option => option.setName('message').setDescription('Tip: Include [member] in your message to mention the user.').setRequired(true))	
+				.addStringOption(option => option.setName('message').setDescription('Tip: Include [member] in your message to mention the user.').setRequired(true))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
 				.setName('ban-message')
 				.setDescription('Set the message to be sent when someone is banned from the server')
-				.addStringOption(option => option.setName('message').setDescription('Tip: Include [member] in your message to mention the user.').setRequired(true))	
+				.addStringOption(option => option.setName('message').setDescription('Tip: Include [member] in your message to mention the user.').setRequired(true))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
 				.setName('channel')
-				.setDescription('Set the channel the join/leave/ban messages are to be sent in')
-				.addChannelOption(option => option.setName('channel').setDescription('The link to the background image for the greeting image').setRequired(true))	
+				.setDescription('Set the text channel the join/leave/ban messages are to be sent in')
+				.addChannelOption(option =>
+					option
+						.setName('channel')
+						.setDescription('The text channel to send messages to')
+						.addChannelTypes([ChannelType.GuildText, ChannelType.GuildAnnouncement])
+						.setRequired(true)
+				)
 		)
 		.addSubcommand(subcommand => 
 			subcommand
@@ -61,7 +68,7 @@ export const command = {
 			subcommand
 				.setName('autorole')
 				.setDescription('Set the roles to be assigned when someone joins the server')
-				.addStringOption(option => option.setName('roles').setDescription('The roles to be assigned when someone joins the server').setRequired(true))	
+				.addStringOption(option => option.setName('roles').setDescription('The roles to be assigned when someone joins the server').setRequired(true))
 		)
 		.addSubcommand(subcommand => 
 			subcommand
@@ -71,14 +78,15 @@ export const command = {
 	,
 	async execute(interaction: ChatInputCommandInteraction) {
 		const server = database.servers.find(server => server.get('guildID') === interaction.guildId)
-		if (!server) return interaction.reply('Unable to access settings for your server.')
-		const channels: GuildBasedChannel[] = interaction.guild?.channels.cache.map((channel: GuildBasedChannel) => channel)!
-		const generalChannel = channels[findBestCIMatch('general', channels?.map(channel => channel.name)).bestMatchIndex].id
+		if (!server) {
+			interaction.reply('Unable to access settings for your server.')
+			return
+		}
 
 		const command = interaction.options.getSubcommand()
 		const setting = interaction.options.getString('setting')! as toggleableGreetingSetting
 		const message = interaction.options.getString('message')!
-		const channel = interaction.options.getChannel('channel')!
+		const channel = interaction.options.getChannel('channel', true, [ChannelType.GuildText, ChannelType.GuildAnnouncement])
 		const linkInput = interaction.options.getString('link')
 		const imageInput = interaction.options.getAttachment('image')
 		const roleIDs = interaction.options.getString('roles')?.match(/\d+/g)
@@ -89,7 +97,7 @@ export const command = {
 				joinMessage: '👋 Welcome to the server, [member]!',
 				leaveMessage: '👋 Goodbye, [member].',
 				banMessage: '🔨 [member] has been banned.',
-				channelID: generalChannel,
+				channelID: null,
 				background: null,
 				autoRoles: [],
 				sendJoinMessage: false,
@@ -99,20 +107,31 @@ export const command = {
 				useAutoRole: false,
 			} 
 		
-		if (command === 'toggle'){
+		if (command === 'toggle') {
 			greetingSettings[setting] = !greetingSettings[setting as toggleableGreetingSetting]
-			if (/Image|Role/.test(setting)) interaction.reply(`${/Image/.test(setting) ? 'Join Image' : 'Auto Role'} has been ${greetingSettings[setting] ? 'enabled' : 'disabled'}.`)
-			else interaction.reply(`${titleize(String(setting.match(/(?<=send).+(?=Message)/)))} Message has been ${greetingSettings[setting] ? 'enabled' : 'disabled'}.`)
-		} else if (/message/.test(command)){
+			if (/Image|Role/.test(setting)) {
+				interaction.reply(`${/Image/.test(setting) ? 'Join Image' : 'Auto Role'} has been ${greetingSettings[setting] ? 'enabled' : 'disabled'}.`)
+			} else {
+				interaction.reply(`${titleize(String(setting.match(/(?<=send).+(?=Message)/)))} Message has been ${greetingSettings[setting] ? 'enabled' : 'disabled'}.`)
+			}
+		} else if (/message/.test(command)) {
 			const msgType = String(command.match(/.+(?=-)/)) + 'Message'
 			greetingSettings[msgType as 'joinMessage' | 'leaveMessage' | 'banMessage'] = message
 			interaction.reply(`${titleize(String(msgType.match(/.+(?=Message)/)))} Message set.`)
-		} else if (command === 'channel'){
+		} else if (command === 'channel') {
+			const channelPermissions = channel.permissionsFor(interaction.guild!.members.me!)
+			const missingPermissions = channelPermissions.missing(['SendMessages', 'AttachFiles', 'ViewChannel'])
+			if (missingPermissions.length > 0) {
+				interaction.reply(`I don't have sufficient permissions in that channel! Please grant me permissions to **${formatList(missingPermissions)}** in ${channelMention(channel.id)}, and then run this command again.`)
+				return
+			}
+
 			greetingSettings.channelID = channel.id
 			interaction.reply(`Greeting channel set to <#${channel.id}>`)
-		} else if (command === 'background'){
+		} else if (command === 'background') {
 			if (!imageInput && !linkInput) {
-				return interaction.reply('You must provide an image link or an image upload!')
+				interaction.reply('You must provide an image link or an image upload!')
+				return
 			}
 
 			await interaction.deferReply()
@@ -139,7 +158,7 @@ export const command = {
 			
 			greetingSettings.background = imageLink
 			interaction.editReply('Join image background set.')
-		} else if (command === 'autorole'){
+		} else if (command === 'autorole') {
 			if (!roleIDs) return interaction.reply('The roles you provided were invalid.')
 			const clientUser = interaction.guild?.members.me! as GuildMember
 			const addedRoles: string[] = [], invalidRoles: string[] = []
@@ -163,10 +182,14 @@ export const command = {
 				})
 				.setColor('Blue')
 
-			if (addedRoles.length > 0) rolesEmbed.addFields([{name: `Auto-Assigned Roles:`, value: `${addedRoles.join(' ')}`}])
-			if (invalidRoles.length > 0) rolesEmbed.addFields([{name: 'Invalid roles:', value: `${invalidRoles.join(' ')}`}])
+			if (addedRoles.length > 0) {
+				rolesEmbed.addFields([{ name: `Auto-Assigned Roles:`, value: `${addedRoles.join(' ')}` }])
+			}
+			if (invalidRoles.length > 0) {
+				rolesEmbed.addFields([{ name: 'Invalid roles:', value: `${invalidRoles.join(' ')}` }])
+			}
 
-			interaction.reply({embeds: [rolesEmbed]})
+			interaction.reply({ embeds: [rolesEmbed] })
 		} else if (command === 'settings'){	
 			let joinMsg = greetingSettings.joinMessage
 			let	leaveMsg = greetingSettings.leaveMessage
@@ -176,30 +199,35 @@ export const command = {
 			leaveMsg = leaveMsg.replace('[member]', interaction.user.username)
 			banMsg = banMsg.replace('[member]', interaction.user.username)
 	
-			if (joinMsg.length > 1000) {joinMsg = joinMsg.substring(0, 1000) + '...' }
-			if (leaveMsg.length > 1000) {leaveMsg = leaveMsg.substring(0, 1000) + '...' }
-			if (banMsg.length > 1000) {banMsg = banMsg.substring(0, 1000) + '...' }
+			if (joinMsg.length > 1000)  { joinMsg = joinMsg.substring(0, 1000) + '...' }
+			if (leaveMsg.length > 1000) { leaveMsg = leaveMsg.substring(0, 1000) + '...' }
+			if (banMsg.length > 1000)   { banMsg = banMsg.substring(0, 1000) + '...' }
 			
 			const greetingEmbed = new EmbedBuilder()
 				.setTitle('Server Greeting Settings')
 				.setColor('Blue')
 				.setDescription(`Greeting messages are currently set to be sent in <#${greetingSettings.channelID}>.`)
 				.addFields([
-					{name: 'Join Message', value: greetingSettings.sendJoinMessage ? 'Enabled' : 'Disabled', inline: true},
-					{name: '\u200b', value: '\u200b', inline: true},
-					{name: 'Leave Message', value: greetingSettings.sendLeaveMessage ? 'Enabled' : 'Disabled', inline: true},
-					{name: 'Ban Message', value: greetingSettings.sendBanMessage ? 'Enabled' : 'Disabled', inline: true},
-					{name: '\u200b', value: '\u200b', inline: true},
-					{name: 'Auto Role', value: greetingSettings.useAutoRole ? 'Enabled' : 'Disabled', inline: true},
-					{name: 'Join Message', value: joinMsg},
-					{name: 'Leave Message', value: leaveMsg},
-					{name: 'Ban Message', value: banMsg},
-					{name: 'Auto-Assigned Roles', value: greetingSettings.autoRoles.length > 0 ? greetingSettings.autoRoles.map(roleID => `<@&${roleID}>`).join(' ') : 'None'},
-					{name: '\u200b', value: `**Join Image \`${greetingSettings.showJoinImage ? 'Enabled' : 'Disabled'}\`**`},
+					{ name: 'Join Message', value: greetingSettings.sendJoinMessage ? 'Enabled' : 'Disabled', inline: true },
+					{ name: '\u200b', value: '\u200b', inline: true },
+					{ name: 'Leave Message', value: greetingSettings.sendLeaveMessage ? 'Enabled' : 'Disabled', inline: true },
+					{ name: 'Ban Message', value: greetingSettings.sendBanMessage ? 'Enabled' : 'Disabled', inline: true },
+					{ name: '\u200b', value: '\u200b', inline: true },
+					{ name: 'Auto Role', value: greetingSettings.useAutoRole ? 'Enabled' : 'Disabled', inline: true },
+					{ name: 'Join Message', value: joinMsg },
+					{ name: 'Leave Message', value: leaveMsg },
+					{ name: 'Ban Message', value: banMsg },
+					{ name: 'Auto-Assigned Roles', value: greetingSettings.autoRoles.length > 0 ? greetingSettings.autoRoles.map(roleID => `<@&${roleID}>`).join(' ') : 'None' },
+					{ name: '\u200b', value: `**Join Image \`${greetingSettings.showJoinImage ? 'Enabled' : 'Disabled'}\`**` },
 				])
 				.setImage('attachment://welcome.png')
-			if (!greetingSettings.channelID) greetingEmbed.setDescription('No channel has been set to display greeting messages.')
-			return interaction.reply({embeds: [greetingEmbed], files: [await makeGreetingImage(greetingSettings, interaction.user)]})
+
+			if (!greetingSettings.channelID) {
+				greetingEmbed.setDescription('No channel has been set to display greeting messages.')
+			}
+
+			interaction.reply({ embeds: [greetingEmbed], files: [await makeGreetingImage(greetingSettings, interaction.user)] })
+			return
 		}
 
 		server.set('greeting', JSON.stringify(greetingSettings))
