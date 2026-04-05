@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, GuildMember, SlashCommandBuilder } from 'discord.js'
+import { ChatInputCommandInteraction, GuildMember, MessageFlags, SlashCommandBuilder } from 'discord.js'
 import { getImageLink, uploadImage } from '../../utils/image.js'
 import { calcDraws, getEmbedProfile, getProfile, manageSpark } from '../../commandHelpers/spark.js'
 import { round } from '../../utils/number.js'
@@ -12,7 +12,7 @@ export const command = {
 			subcommand
 				.setName('set')
 				.setDescription('Set your spark resources')
-				.addStringOption(option => option.setName('sh').setDescription('Add to all resources at once (shorthand option)'))
+				.addStringOption(option => option.setName('sh').setDescription('Set all resources at once (shorthand option)'))
 				.addNumberOption(option => option.setName('crystals').setDescription('The number of Crystals to set').setMinValue(0))
 				.addNumberOption(option => option.setName('tickets').setDescription('The number of Tickets to set').setMinValue(0))
 				.addNumberOption(option => option.setName('10-parts').setDescription('The number of 10-Part Tickets to set').setMinValue(0))
@@ -32,7 +32,7 @@ export const command = {
 			subcommand
 				.setName('subtract')
 				.setDescription('Subtract from your spark resources')
-				.addStringOption(option => option.setName('sh').setDescription('Add to all resources at once (shorthand option)'))
+				.addStringOption(option => option.setName('sh').setDescription('Subtract from all resources at once (shorthand option)'))
 				.addNumberOption(option => option.setName('crystals').setDescription('The number of Crystals to subtract').setMinValue(0))
 				.addNumberOption(option => option.setName('tickets').setDescription('The number of Tickets to subtract').setMinValue(0))
 				.addNumberOption(option => option.setName('10-parts').setDescription('The number of 10-Part Tickets to subtract').setMinValue(0))
@@ -181,7 +181,10 @@ export const command = {
 		const nickname = member.nickname
 		if (interaction.guild?.ownerId === member.id) return
 		if (nickname && /\(\d+\/300\)|\d+\.\d\d%/.test(nickname)){
-			if (!member.manageable) return interaction.followUp({content: `I could not update your nickname due to missing permissions.`, ephemeral: true})
+			if (!member.manageable) {
+				interaction.followUp({ content: `I could not update your nickname due to missing permissions.`, flags: MessageFlags.Ephemeral })
+				return
+			}
 			
 			const newNickname = /\(\d+\/300\)/.test(nickname) 
 				? nickname.replace(/\(\d+\/300\)/, `(${calcDraws(user)}/300)`) 
