@@ -113,7 +113,12 @@ export const command = {
 			case 'add':
 			case 'subtract':
 				if (shorthandInput) {
-					const shorthandMatch = shorthandInput.replace(',', '').match(/\d+/g)!
+					const shorthandMatch = shorthandInput.replace(',', '').match(/\d+/g)
+                    if (!shorthandMatch) {
+                        await interaction.reply(`You did not enter a valid shorthand input!`)
+                        return
+                    }
+
 					crystals = shorthandMatch[0] ? parseInt(shorthandMatch[0]) : null
 					tickets	 = shorthandMatch[1] ? parseInt(shorthandMatch[1]) : null
 					tenparts = shorthandMatch[2] ? parseInt(shorthandMatch[2]) : null
