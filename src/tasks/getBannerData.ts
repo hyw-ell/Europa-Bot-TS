@@ -10,7 +10,7 @@ const SPECIALTIES = ['?', 'Sabre', 'Dagger', 'Spear', 'Axe', 'Staff', 'Gun', 'Me
 const ATTRIBUTES = ['?', 'Fire', 'Water', 'Earth', 'Wind', 'Light', 'Dark', '7', '8', '9', '10']
 const RARITIES = ['?', 'Normal', 'Rare', 'S Rare', 'SS Rare', '5', '6', '7', '8', '9', '10']
 const STYLES = ['?', 'Balanced', 'Attack', 'Defense', 'Heal', 'Special', '7', '8', '9', '10'] // Internally called "Type", even though the game displays Race next to Type
-const SERIES = ['?', 'Summer', 'Yukata', 'Valentine', 'Halloween', 'Holiday', '12 Generals', 'Grand', 'Fantasy', 'Tie-In', 'Eternals', 'Evokers', '4 Saints', 'Formal', '14', '15', '16', '17', '18', '19', '20']
+const SERIES = ['?', 'Summer', 'Yukata', 'Valentine', 'Halloween', 'Holiday', '12 Generals', 'Grand', 'Fantasy', 'Collab', 'Eternals', 'Evokers', '4 Saints', 'Formal', '14', '15', '16', '17', '18', '19', '20']
 const TRIBES = ['?', 'Human', 'Erune', 'Draph', 'Harvin', 'Unknown', 'Primal', '7', '8', '9', '10']
 
 /**
