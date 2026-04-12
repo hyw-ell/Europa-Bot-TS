@@ -24,6 +24,7 @@ export type item = {
     character: string | null
 }
 export type bannerInfo = {
+    path?: string
     id: string
     key: string
     start: string
@@ -57,6 +58,6 @@ export type character = {
 }
 
 export const bannerData = {
-    bannerInfo: {} as bannerInfo,
+    info: {} as bannerInfo,
     items: [] as item[]
 }

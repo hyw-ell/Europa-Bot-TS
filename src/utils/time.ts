@@ -18,6 +18,10 @@ const fullDates: {[key: string]: string} = {
     'Dec': 'December'
 }
 
+export function sleep(ms: number) { 
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 /**
  * Converts UTC offset in format ±hours:minutes to minutes
  * @param {String} offset - The UTC offset in format ±hours:minutes 

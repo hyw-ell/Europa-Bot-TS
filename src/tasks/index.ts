@@ -13,6 +13,7 @@ import { CHANNEL_IDS } from '../data/discord.js'
 import { updateCounter } from './updateCounter.js'
 import { getCharacterData } from './getCharacterData.js'
 import { getSummonData } from './getSummonData.js'
+import { MILLISECONDS } from '../data/time.js'
 
 export async function runStartupTasks() {
     console.log(`Shard #${THIS_SHARD_ID} is now online`)
@@ -23,13 +24,13 @@ export async function runStartupTasks() {
         connectDatabase(),
     ])
 
-    // getBannerData()
+    getBannerData()
     registerCommands()
     await getEventsData()
     makeEventsTemplate()
 
     schedule('0 * * * *', async () => {
-        // getBannerData()
+        getBannerData(MILLISECONDS.MINUTE * 3)
         connectDatabase()
         
         await getEventsData()
