@@ -119,7 +119,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
 
     ctx.font = `18px Default ${fontFallBacks}`
     ctx.textAlign = 'left'
-    canvas.wrapText(`${starCharText}`, 525, 427, 240, 15)
+    canvas.wrapText(`${starCharText}`, 525, 427, 240, 15, true)
 
     if (starCharRinged) ctx.drawImage(images['Perpetuity_Ring_Icon.png'], 460, 409, 22, 22)
 
