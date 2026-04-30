@@ -128,21 +128,21 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
         })
         .setFooter({
             text: 'https://gbfdata.com/',
-            iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/refs/heads/main/assets/gbfdata%20Icon.png' // TODO use local attachment
+            iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/refs/heads/main/assets/Icons/gbfdata%20Icon.png' // TODO use local attachment
         })
 
     await interaction.editReply({ embeds: [searchEmbed] })
     
     // Search https://gbfdata.com for players
-    let players = await axios.get(`https://gbfdata.com/user/search?q=${urlencode(playerName)}&is_fulltext=1`).then(({data}) => {
-        const playerData = String(data.match(/(?<=\/thead>).+(?=<\/table)/s))
-        const playerMatches = playerData.matchAll(/href=".+?(\d+)">\n\s+(.+?)\n.+?"num">(\d+)/gs)
-        return [...playerMatches].map(player => ({userid: player[1], name: player[2], level: player[3]}))
-    }).catch(() => undefined)
+    type playerData = { user_id: number, name: string, level: number, ranking: null | { rank: number, point: number } }
+    const { data: { data: playerData } } = await axios.get<{ data: playerData[] }>(
+        `https://gbfdata.com/api/users/search?q=${urlencode(playerName)}&is_fulltext=1`,
+        { headers: { 'User-Agent': 'Europa Bot' } }
+    ).catch(() => ({ data: { data: undefined } }))
 
-    if (!players || players.length === 0) {
+    if (!playerData || playerData.length === 0) {
         interaction.editReply({
-            content: players
+            content: playerData
                 ? `I could not find any players named "${playerName}". Please adjust your spelling or capitalization and try again.`
                 : 'Player search is currently unavailable. Please try again later.',
             embeds: []
@@ -150,12 +150,12 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
         return
     }
     
-    if (players.length === 1) { return players[0].userid }
+    if (playerData.length === 1) { return String(playerData[0].user_id) }
 
-    players.sort((a, b) => parseInt(b.level) - parseInt(a.level))
-    players.sort((a, b) => compareTwoStrings(b.name, playerName) - compareTwoStrings(a.name, playerName))
-    const formattedPlayers = players.map(player => `${player.name} Rank ${player.level} (${player.userid})`)
+    playerData.sort((a, b) => b.level - a.level)
+    playerData.sort((a, b) => compareTwoStrings(b.name, playerName) - compareTwoStrings(a.name, playerName))
+    const formattedPlayers = playerData.map(player => `${player.name} Rank ${player.level} (${player.user_id})`)
 
     const userChoice = await showMenu(interaction, playerName, formattedPlayers)
-    return isNumber(userChoice) ? players[userChoice].userid : undefined
+    return isNumber(userChoice) ? String(playerData[userChoice].user_id) : undefined
 }

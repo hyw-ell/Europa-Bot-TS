@@ -10,7 +10,7 @@ export const command = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('name')
-				.setDescription('Search for a player by their name')
+				.setDescription('Search for a player by their name (using gbfdata.com)')
 				.addStringOption(option => option.setName('name').setDescription("The name of the player you're looking for").setRequired(true))
 		)
 		.addSubcommand(subcommand =>
