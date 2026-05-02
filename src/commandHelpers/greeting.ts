@@ -1,7 +1,7 @@
 import { AttachmentBuilder, User } from 'discord.js'
 import { loadImage } from 'canvas'
 import { fontFallBacks } from '../bot.js'
-import { images } from '../data/assets.js'
+import { IMAGES } from '../data/assets.js'
 import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export type toggleableGreetingSetting = 'sendJoinMessage' | 'sendLeaveMessage' | 'sendBanMessage' | 'showJoinImage' | 'useAutoRole';
@@ -27,7 +27,7 @@ export async function makeGreetingImage(greetingSettings: greetingConfig, user: 
     const canvas = new EnhancedCanvas(700, 250)
 	const ctx = canvas.ctx
 	
-	const background = greetingSettings.background ? await loadImage(greetingSettings.background) : images['Skydom_Wallpaper.png']
+	const background = greetingSettings.background ? await loadImage(greetingSettings.background) : IMAGES['Skydom_Wallpaper.png']
 	const avatar = await loadImage(user.displayAvatarURL({ extension: 'png', size: 4096, forceStatic: true }))
 
 	ctx.drawImage(background, 0, 0, canvas.width, canvas.height)

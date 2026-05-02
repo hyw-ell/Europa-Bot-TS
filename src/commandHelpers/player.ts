@@ -6,7 +6,7 @@ import { languageCookie, accessCookie } from '../data/granblue.js'
 import { decode } from 'html-entities'
 import { MILLISECONDS } from '../data/time.js'
 import { browser, startPuppeteer } from '../utils/browser.js'
-import { images } from '../data/assets.js'
+import { IMAGES } from '../data/assets.js'
 import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export async function loadProfile(interaction: ChatInputCommandInteraction, playerID: string) {
@@ -67,7 +67,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
 
     const playerProfile = await loadImage(Buffer.from(screenshot))
     ctx.drawImage(playerProfile, 0, 0)
-    ctx.drawImage(images['Player_Template.png'], 350, 0)
+    ctx.drawImage(IMAGES['Player_Template.png'], 350, 0)
     
     // Fetch/compile summon info and draw summons with uncap stars
     ctx.shadowColor = '#000000'
@@ -93,7 +93,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
     let starCharText = decode(String(bodyHTML.match(/(?<=prt-pushed-info">).+?(?=<)/s)))
     let starCharImage
     if (starCharURL.includes('empty.jpg')) {
-        starCharImage = images['Open_Support_Summon.png']
+        starCharImage = IMAGES['Open_Support_Summon.png']
         starCharName = 'Not Set'
         emLvl = 'N/A'
     }
@@ -121,7 +121,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
     ctx.textAlign = 'left'
     canvas.wrapText(`${starCharText}`, 525, 427, 240, 15, true)
 
-    if (starCharRinged) ctx.drawImage(images['Perpetuity_Ring_Icon.png'], 460, 409, 22, 22)
+    if (starCharRinged) ctx.drawImage(IMAGES['Perpetuity_Ring_Icon.png'], 460, 409, 22, 22)
 
     const attachment = new AttachmentBuilder(canvas.toBuffer(), { name: `Player_${playerID}.png` })
 

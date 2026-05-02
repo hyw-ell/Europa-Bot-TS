@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { capFirstLetter } from '../../utils/string.js'
+import { IMAGE_URLS } from '../../data/assets.js'
 
 export const command = {
 	data: new SlashCommandBuilder()
@@ -16,7 +17,7 @@ export const command = {
 
 		const answerEmbed = new EmbedBuilder()
 			.setAuthor({
-				iconURL: 'https://i.imgur.com/0wLgnwS.png', // TODO Use local attachment
+				iconURL: IMAGE_URLS['Red_Question_Mark.png'],
 				name: 'Question: ' + question + (/\?$/.test(question) ? '' : '?')
 			})
 			.setDescription(`<@${interaction.user.id}> ${answers[rand]}`)

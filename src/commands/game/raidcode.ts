@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { categoryRole } from '../../data/role.js'
 import { database } from '../../data/database.js'
+import { IMAGE_URLS } from '../../data/assets.js'
 
 export const command = {
 	data: new SlashCommandBuilder()
@@ -37,7 +38,7 @@ export const command = {
 
 		const raidEmbed = new EmbedBuilder()
 			.setAuthor({
-				iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/main/assets/Raid%20Icon.png', // TODO Use local attachment
+				iconURL: IMAGE_URLS['Raid_Icon.png'],
 				name: raidName ?? raidRole?.name ?? 'Unknown Raid',
 			})
 			.setDescription(message)
@@ -48,7 +49,12 @@ export const command = {
 		if (hp || hpPercent) raidEmbed.addFields({ name: 'Boss HP', value: (hp && hpPercent) ? `${hp} [${hpPercent}%]` : (hp ?? hpPercent + '%'), inline: true })
 		if (participants) 	 raidEmbed.addFields({ name: 'Participants', value: participants, inline: true })
 		if (questID) 		 raidEmbed.setThumbnail(`https://prd-game-a1-granbluefantasy.akamaized.net/assets_en/img/sp/quest/assets/lobby/${questID}.png`)
-		if (!(raidName && time && hp && hpPercent && participants && questID)) raidEmbed.addFields({name: '\u200B', value: '❗ For best results, use the associated [bookmarklet](https://hyw-ell.github.io/Demo/bookmarklets.html).'})
+		if (!(raidName && time && hp && hpPercent && participants && questID)) {
+			raidEmbed.addFields({
+				name: '\u200B',
+				value: '❗ For best results, use the associated [bookmarklet](https://hyw-ell.github.io/Demo/bookmarklets.html).'
+			})
+		}
 		
 		await interaction.reply({
 			content: raidRole ? '### ' + String(raidRole) : undefined,

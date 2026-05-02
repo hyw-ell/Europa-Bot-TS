@@ -1,5 +1,5 @@
 import { eventData } from '../data/events.js'
-import { images } from '../data/assets.js'
+import { IMAGES } from '../data/assets.js'
 import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 /**
@@ -14,13 +14,13 @@ export async function makeEventsTemplate() {
     const canvas = new EnhancedCanvas(700, canvasHeight)
     const ctx = canvas.ctx
 
-    ctx.drawImage(images['Events_Background_Top.png'], 0, 0)
-    ctx.drawImage(images['Events_Background_Middle.png'], 0, 100, 700, canvasHeight - 150)
-    ctx.drawImage(images['Events_Background_Bottom.png'], 0, canvasHeight - 50)
+    ctx.drawImage(IMAGES['Events_Background_Top.png'], 0, 0)
+    ctx.drawImage(IMAGES['Events_Background_Middle.png'], 0, 100, 700, canvasHeight - 150)
+    ctx.drawImage(IMAGES['Events_Background_Bottom.png'], 0, canvasHeight - 50)
 
     let X = 25
     let Y = Math.ceil(numCurrentEvents / 2) * 110 + 110 + 5
-    ctx.drawImage(images['Upcoming_Events_Text.png'], 155, Y)
+    ctx.drawImage(IMAGES['Upcoming_Events_Text.png'], 155, Y)
     Y += 45
 
     eventData.upcomingEvents.forEach((event, i) => {

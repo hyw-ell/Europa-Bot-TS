@@ -2,7 +2,7 @@
  * 5200+ Random Questions from https://conversationstartersworld.com/random-question-generator/
  * 
  * Roughly reviewed and edited by me
-*/
+ */
 export const questions = [
     "What was your best drop the mic moment?",
     "What childish thing do you still enjoy?",

@@ -3,6 +3,7 @@ import { findBestCIMatch, titleize } from '../utils/string.js'
 import { weaponEmotes, rarityEmotes } from '../data/granblue.js'
 import { database } from '../data/database.js'
 import { item, bannerData } from '../data/banner.js'
+import { IMAGE_URLS } from '../data/assets.js'
 
 export function gacha(crystals: number, singles: number, tenparts: number, target?: item, modifier?: 'gachapin' | 'mukku' | 'super mukku') {
     /**
@@ -92,7 +93,7 @@ export function createGachaEmbed(items: item[], target?: item, modifier?: 'gacha
     if (modifier) gachaTitle = gachaTitle.replace(':__', ` from ${titleize(modifier)} Frenzy:__`)
 
     const rollEmbed = new EmbedBuilder()
-        .setAuthor({ name: 'Gacha Simulator', iconURL: 'https://i.imgur.com/MN6TIHj.png' }) // TODO Use local attachment
+        .setAuthor({ name: 'Gacha Simulator', iconURL: IMAGE_URLS['SSR_Crystal.png'] })
         .setTitle(gachaTitle)
         .setColor('Blue')
     

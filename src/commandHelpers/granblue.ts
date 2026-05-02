@@ -5,7 +5,7 @@ import axios from 'axios'
 import urlencode from 'urlencode'
 import { database } from '../data/database.js'
 import { showMenu } from './menu.js'
-import { images } from '../data/assets.js'
+import { IMAGE_URLS, IMAGES } from '../data/assets.js'
 import { isNumber } from '../utils/number.js'
 
 /**
@@ -59,7 +59,7 @@ export async function getAllSummonInfo(rawHtml: string){
         }
 
         summons.push({
-            image: images['Private_Support_Summon.png'],
+            image: IMAGES['Private_Support_Summon.png'],
             level: level,
             uncaps: uncaps,
             maxUncaps: maxUncaps
@@ -98,12 +98,12 @@ export function drawStars(ctx: CanvasRenderingContext2D, spacing: number, size: 
         let star: Image
 
         if (maxUncaps === 6) {
-            star = i <= uncaps ? images['Transcendence_Star_5.png'] : images['Transcendence_Star_Blank.png']
+            star = i <= uncaps ? IMAGES['Transcendence_Star_5.png'] : IMAGES['Transcendence_Star_Blank.png']
         } else {
             if (i <= 3) {
-                star = i <= uncaps ? images['Uncap_Star.png'] : images['Uncap_Star_Blank.png']
+                star = i <= uncaps ? IMAGES['Uncap_Star.png'] : IMAGES['Uncap_Star_Blank.png']
             } else {
-                star = i <= uncaps ? images['Blue_Uncap_Star.png'] : images['Blue_Uncap_Star_Blank.png']
+                star = i <= uncaps ? IMAGES['Blue_Uncap_Star.png'] : IMAGES['Blue_Uncap_Star_Blank.png']
             }
         }
 
@@ -124,11 +124,11 @@ export async function findPlayer(interaction: ChatInputCommandInteraction, playe
         .setColor('Blue')
         .setAuthor({
             name: 'Player Search',
-            iconURL: 'https://upload.wikimedia.org/wikipedia/en/e/e5/Granblue_Fantasy_logo.png'
+            iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png']
         })
         .setFooter({
             text: 'https://gbfdata.com/',
-            iconURL: 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/refs/heads/main/assets/Icons/gbfdata%20Icon.png' // TODO use local attachment
+            iconURL: IMAGE_URLS['gbfdata_Icon.png']
         })
 
     await interaction.editReply({ embeds: [searchEmbed] })

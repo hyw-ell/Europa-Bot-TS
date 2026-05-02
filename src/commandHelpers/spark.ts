@@ -5,7 +5,7 @@ import { fontFallBacks } from '../bot.js'
 import { formatList } from '../utils/string.js'
 import { round } from '../utils/number.js'
 import { userData } from '../data/database.js'
-import { images } from '../data/assets.js'
+import { IMAGES } from '../data/assets.js'
 import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUser: User) {
@@ -18,23 +18,23 @@ export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUs
     if (background) customBackground = await loadImage(background).catch(() => undefined)
 
     if (customBackground){
-        ctx.drawImage(images['Spark_Template_Background_Mask.png'], 0, 0)
+        ctx.drawImage(IMAGES['Spark_Template_Background_Mask.png'], 0, 0)
         ctx.globalCompositeOperation = 'source-in'
         ctx.drawImage(customBackground, 0, 0, canvas.width, canvas.height)
         ctx.globalCompositeOperation = 'source-over'
-        ctx.drawImage(+mobaCoin ? images['Spark_Template_Translucent_BG_with_MobaCoin.png'] : images['Spark_Template_Translucent_BG.png'], 0, 0)
+        ctx.drawImage(+mobaCoin ? IMAGES['Spark_Template_Translucent_BG_with_MobaCoin.png'] : IMAGES['Spark_Template_Translucent_BG.png'], 0, 0)
     } else {
-        ctx.drawImage(+mobaCoin ? images['Spark_Template_with_MobaCoin.png'] : images['Spark_Template.png'], 0, 0)
+        ctx.drawImage(+mobaCoin ? IMAGES['Spark_Template_with_MobaCoin.png'] : IMAGES['Spark_Template.png'], 0, 0)
     }
     
     const sparkPercent = calcDraws(user, false) / 300
     const progressBars = [
-        images['Progress_Bar_1.png'],
-        images['Progress_Bar_2.png'],
-        images['Progress_Bar_3.png'],
-        images['Progress_Bar_4.png'],
-        images['Progress_Bar_5.png'],
-        images['Progress_Bar_6.png'],
+        IMAGES['Progress_Bar_1.png'],
+        IMAGES['Progress_Bar_2.png'],
+        IMAGES['Progress_Bar_3.png'],
+        IMAGES['Progress_Bar_4.png'],
+        IMAGES['Progress_Bar_5.png'],
+        IMAGES['Progress_Bar_6.png'],
     ]
     if (Math.floor(sparkPercent)-1 >= 0) ctx.drawImage(progressBars[Math.floor(sparkPercent)-1] ?? progressBars[progressBars.length-1], 0, 0) // Draw a full length progress bar if the user has 1 whole spark or more
     if (sparkPercent > 0){ // Draw a portion of a progress bar according to the user's spark percentage
@@ -56,8 +56,8 @@ export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUs
     ctx.fillText(discordUser.displayName, 318, 95)
 
     switch (sparkTitle?.toLowerCase()) {
-        case 'developer': ctx.drawImage(images['Developer_Title.png'], 270, 122); break
-        case 'vip': ctx.drawImage(images['VIP_Title.png'], 302, 122); break
+        case 'developer': ctx.drawImage(IMAGES['Developer_Title.png'], 270, 122); break
+        case 'vip': ctx.drawImage(IMAGES['VIP_Title.png'], 302, 122); break
     }
     
     ctx.font = `24px Default ${fontFallBacks}`

@@ -6,7 +6,7 @@ import { MILLISECONDS } from '../data/time.js'
 import { capFirstLetter } from '../utils/string.js'
 import { parseOffset, getSimpleDate } from '../utils/time.js'
 import { browser } from '../utils/browser.js'
-import { images } from '../data/assets.js'
+import { IMAGES } from '../data/assets.js'
 
 /**
  * Loads and processes event information.
@@ -113,12 +113,12 @@ async function processEvents(events: rawEvent[]): Promise<gbfEvent[]> {
 /** Determines the element advantage and the element advantage image from the event data. */
 function getAdvantagedElement(element: string | null) {
     switch (element) {
-        case 'fire': return { description: `<:WaterAdvantage:1225922220157833277> Water Advantage`, image: images['Water_Advantage.png'] }
-        case 'water': return { description: `<:EarthAdvantage:1225922224154742957> Earth Advantage`, image: images['Earth_Advantage.png'] }
-        case 'earth': return { description: `<:WindAdvantage:1225922221617319976> Wind Advantage`, image: images['Wind_Advantage.png'] }
-        case 'wind': return { description: `<:FireAdvantage:1225922225492856852> Fire Advantage`, image: images['Fire_Advantage.png'] }
-        case 'light': return { description: `<:DarkAdvantage:1225922222871412887> Dark Advantage`, image: images['Dark_Advantage.png'] }
-        case 'dark': return { description: `<:LightAdvantage:1225922226503811153> Light Advantage`, image: images['Light_Advantage.png'] }
+        case 'fire': return { description: `<:WaterAdvantage:1225922220157833277> Water Advantage`, image: IMAGES['Water_Advantage.png'] }
+        case 'water': return { description: `<:EarthAdvantage:1225922224154742957> Earth Advantage`, image: IMAGES['Earth_Advantage.png'] }
+        case 'earth': return { description: `<:WindAdvantage:1225922221617319976> Wind Advantage`, image: IMAGES['Wind_Advantage.png'] }
+        case 'wind': return { description: `<:FireAdvantage:1225922225492856852> Fire Advantage`, image: IMAGES['Fire_Advantage.png'] }
+        case 'light': return { description: `<:DarkAdvantage:1225922222871412887> Dark Advantage`, image: IMAGES['Dark_Advantage.png'] }
+        case 'dark': return { description: `<:LightAdvantage:1225922226503811153> Light Advantage`, image: IMAGES['Light_Advantage.png'] }
         default: return { description: 'No Element Advantage', image: null }
     }
 }

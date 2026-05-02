@@ -1,4 +1,5 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
+import { client } from '../../bot.js'
 
 export const command = {
 	data: new SlashCommandBuilder()
@@ -10,8 +11,11 @@ export const command = {
 			.setColor('Blue')
 			.setTitle('About Europa')
 			.setDescription('The complete list of commands for Europa can be found [here](https://hyw-ell.github.io/Europa/commands.html).')
-			.setThumbnail('https://i.imgur.com/f0MfwDw.png') // TODO Use local attachment
-			.addFields([{name: '\u200b', value: 'If you want to talk to my creator about anything, please join the [support server](https://discord.gg/YtwzVSp).'}])
+			.setThumbnail(client.user?.displayAvatarURL({ extension: 'png' }) ?? null)
+			.addFields([{
+				name: '\u200b',
+				value: 'If you want to talk to my creator about anything, please join the [support server](https://discord.gg/YtwzVSp).'
+			}])
     	return interaction.reply({embeds: [helpEmbed]})
 	}
 }

@@ -2,6 +2,7 @@ import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder, SlashComm
 import { getEventDuration } from '../../commandHelpers/events.js'
 import { eventData } from '../../data/events.js'
 import { EnhancedCanvas } from '../../classes/EnhancedCanvas.js'
+import { IMAGE_URLS } from '../../data/assets.js'
 
 export const command = {
 	data: new SlashCommandBuilder()
@@ -21,7 +22,7 @@ export const command = {
 				.setDescription('**__CURRENT AND UPCOMING EVENTS__**')
 				.setURL('https://gbf.wiki/Main_Page')
 				.setColor('Blue')
-				.setFooter({ text: 'https://gbf.wiki/Main_Page', iconURL: 'https://i.imgur.com/MN6TIHj.png' }) // TODO Use local attachment
+				.setFooter({ text: 'https://gbf.wiki/Main_Page', iconURL: IMAGE_URLS['SSR_Crystal.png'] })
 			
 			currentEvents.forEach(event => eventEmbed.addFields([{
 				name: event.title + (event.elementAdvantage ? ` (${event.elementAdvantage})` : ''),
