@@ -1,8 +1,9 @@
 import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
+import { crew, loadCrew } from '../../commandHelpers/crew.js'
+import { showMenu } from '../../commandHelpers/menu.js'
+import { IMAGE_URLS } from '../../data/assets.js'
 import { compareTwoStrings } from 'string-similarity'
 import axios from 'axios'
-import { showMenu } from '../../commandHelpers/menu.js'
-import { crew, loadCrew } from '../../commandHelpers/crew.js'
 
 export const command = {
 	data: new SlashCommandBuilder()
@@ -28,10 +29,13 @@ export const command = {
 		const crewEmbed = new EmbedBuilder()
 			.setTitle(`Searching for ${crewName ?? crewID} <a:loading:763160594974244874>`)
 			.setColor('Blue')
-			.setAuthor({name: 'Crew Search', iconURL: 'https://upload.wikimedia.org/wikipedia/en/e/e5/Granblue_Fantasy_logo.png'})
-			.setFooter({text: 'http://gbf.gw.lt/gw-guild-searcher/', iconURL: 'http://game.granbluefantasy.jp/favicon.ico'})
+			.setAuthor({ name: 'Crew Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
+			.setFooter({
+				text: 'http://gbf.gw.lt/gw-guild-searcher/',
+				iconURL: 'http://game.granbluefantasy.jp/favicon.ico'
+			})
 		
-		await interaction.reply({embeds: [crewEmbed]})
+		await interaction.reply({ embeds: [crewEmbed] })
 
 		const options = crewName 
 			? {
@@ -47,7 +51,7 @@ export const command = {
 		let crews: crew[] | null = await axios.request(options).then(({data}) => crewName ? data.result : [data]).catch(() => null)
 
 		if (!crews){
-			crewEmbed.setFooter({text: 'https://gbfdata.com/', iconURL: 'https://pbs.twimg.com/profile_images/1484899620907991047/gypDoVwq_200x200.jpg'})
+			crewEmbed.setFooter({ text: 'https://gbfdata.com/', iconURL: IMAGE_URLS['gbfdata_Icon.png'] })
 			interaction.editReply({embeds: [crewEmbed]})
 			crews = await axios.get(`https://gbfdata.com/guild/search?q=${crewName ?? crewID}&is_fulltext=${crewName ? 1 : 0}`).then(({data}) => {
 				const crewData = String(data.match(/(?<=\/thead>).+(?=<\/table)/s))
@@ -56,8 +60,8 @@ export const command = {
 			}).catch(() => null)
 		}
 
-		if (!crews) 			return interaction.editReply({content: 'Crew Search is currently unavailable. Please try again later.', embeds: []})
-		if (!crews[0]?.data[0]) return interaction.editReply({content: `No crews were found for ${crewName ?? crewID}.`, embeds: []})
+		if (!crews) 			return interaction.editReply({ content: 'Crew Search is currently unavailable. Please try again later.', embeds: [] })
+		if (!crews[0]?.data[0]) return interaction.editReply({ content: `No crews were found for ${crewName ?? crewID}.`, embeds: [] })
 		if (crews.length === 1) return loadCrew(interaction, crews[0])
 
 		crews.sort((a, b) => +a.data[0].rank - +b.data[0].rank)

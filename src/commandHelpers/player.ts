@@ -6,13 +6,13 @@ import { languageCookie, accessCookie } from '../data/granblue.js'
 import { decode } from 'html-entities'
 import { MILLISECONDS } from '../data/time.js'
 import { browser, startPuppeteer } from '../utils/browser.js'
-import { IMAGES } from '../data/assets.js'
+import { IMAGE_URLS, IMAGES } from '../data/assets.js'
 import { EnhancedCanvas } from '../classes/EnhancedCanvas.js'
 
 export async function loadProfile(interaction: ChatInputCommandInteraction, playerID: string) {
     const playerEmbed = new EmbedBuilder()
         .setColor('Blue')
-        .setAuthor({name: 'Player Search', iconURL: 'https://upload.wikimedia.org/wikipedia/en/e/e5/Granblue_Fantasy_logo.png'})
+        .setAuthor({ name: 'Player Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
         .setTitle('Fetching Player Profile <a:loading:763160594974244874>')
     interaction.editReply({ embeds: [playerEmbed], components: [] })
 

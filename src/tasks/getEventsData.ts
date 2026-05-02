@@ -6,7 +6,7 @@ import { MILLISECONDS } from '../data/time.js'
 import { capFirstLetter } from '../utils/string.js'
 import { parseOffset, getSimpleDate } from '../utils/time.js'
 import { browser } from '../utils/browser.js'
-import { IMAGES } from '../data/assets.js'
+import { IMAGE_URLS, IMAGES } from '../data/assets.js'
 
 /**
  * Loads and processes event information.
@@ -85,7 +85,7 @@ async function processEvents(events: rawEvent[]): Promise<gbfEvent[]> {
         let imgName, imgHash, imgURL = null
 
         if (event.name === 'Maintenance') {
-            imgURL = 'https://raw.githubusercontent.com/hyw-ell/Europa-Bot-TS/main/assets/Events/Maintenance_Event.png'
+            imgURL = IMAGE_URLS['Maintenance_Event.png']
         } else if (event.image) {
             imgName = decode(capFirstLetter(event.image).replace(/ /g, '_').replace(/__/g, '_'))
             imgHash = md5(imgName)

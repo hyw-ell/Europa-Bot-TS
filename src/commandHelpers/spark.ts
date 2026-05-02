@@ -91,8 +91,8 @@ export async function getProfile(user: GoogleSpreadsheetRow<userData>, discordUs
     ctx.restore()
 
     // For Halloween
-    // const cobwebs = await loadImage('https://media.discordapp.net/attachments/647256353844232202/1033487287662690434/SparkProfileCobwebs.png')
-    // ctx.drawImage(cobwebs, 0, 0)
+    const now = new Date()
+    if (now.getMonth() === 9 && now.getDay() > 17) { ctx.drawImage(IMAGES['SparkProfileCobwebs.png'], 0, 0) }
 
     // If the user's custom background caused an error, send a warning.
     return {

@@ -2,6 +2,7 @@ import { AttachmentBuilder, ChatInputCommandInteraction, EmbedBuilder } from "di
 import { formatList } from "../utils/string.js"
 import { languageCookie, accessCookie } from "../data/granblue.js"
 import { browser, startPuppeteer } from '../utils/browser.js'
+import { IMAGE_URLS } from '../data/assets.js'
 
 export interface crew {data: {is_seed: number | string, points: number | string, gw_num: number | string, rank: number | string, name: string}[], id: number}
 export async function loadCrew(interaction: ChatInputCommandInteraction, crew: crew){
@@ -10,8 +11,11 @@ export async function loadCrew(interaction: ChatInputCommandInteraction, crew: c
     const crewEmbed = new EmbedBuilder()
         .setTitle('Loading Crew Page <a:loading:763160594974244874>')
         .setColor('Blue')
-        .setAuthor({name: 'Crew Search', iconURL: 'https://upload.wikimedia.org/wikipedia/en/e/e5/Granblue_Fantasy_logo.png'})
-        .setFooter({text: `http://game.granbluefantasy.jp/#guild/detail/${crew.id}`, iconURL: 'http://game.granbluefantasy.jp/favicon.ico'})
+        .setAuthor({ name: 'Crew Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
+        .setFooter({
+            text: `http://game.granbluefantasy.jp/#guild/detail/${crew.id}`,
+            iconURL: 'http://game.granbluefantasy.jp/favicon.ico'
+        })
     interaction.editReply({embeds: [crewEmbed], components: []})
 
     const page = await browser.newPage()
