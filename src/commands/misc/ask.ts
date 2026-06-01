@@ -12,15 +12,15 @@ export const command = {
 		const question = capFirstLetter(interaction.options.getString('question')!)
 		const yesAnswers = ['Yes', 'Without a doubt', 'Yes, definitely', 'Most Likely', 'Signs point to yes', 'As I see it, yes', 'Certainly']
 		const noAnswers = ['No', 'I doubt it', 'Definitely not', 'Probably not', 'Signs point to no', 'As I see it, no', 'My sources say no']
-		const answers = yesAnswers.concat(noAnswers)
-		const rand = Math.floor(Math.random() * Math.floor(answers.length))
+		const allAnswers = [...yesAnswers, ...noAnswers]
+		const randomIndex = Math.floor(Math.random() * Math.floor(allAnswers.length))
 
 		const answerEmbed = new EmbedBuilder()
 			.setAuthor({
 				iconURL: IMAGE_URLS['Red_Question_Mark.png'],
 				name: 'Question: ' + question + (/\?$/.test(question) ? '' : '?')
 			})
-			.setDescription(`<@${interaction.user.id}> ${answers[rand]}`)
+			.setDescription(`<@${interaction.user.id}> ${allAnswers[randomIndex]}`)
 			.setColor('Blue')
 		await interaction.reply({ embeds: [answerEmbed] })
 	}

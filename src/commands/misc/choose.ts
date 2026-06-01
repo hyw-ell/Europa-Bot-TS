@@ -10,12 +10,12 @@ export const command = {
 	,
 	async execute(interaction: ChatInputCommandInteraction) {
 		const userInput = interaction.options.getString('choices')!
-		const choices = userInput.split(',').map(choice => choice.trim())! // Parse the list of choices provided by the user
-		const rand = Math.floor(Math.random() * Math.floor(choices?.length!))
+		const choices = userInput.split(',').map(choice => choice.trim())!
+		const randomIndex = Math.floor(Math.random() * Math.floor(choices?.length!))
 
 		const choiceEmbed = new EmbedBuilder()
 			.setAuthor({ iconURL: IMAGE_URLS['ABCD.png'], name: 'Choices: ' + formatList(choices) })
-			.setDescription(`<@${interaction.user.id}>, I choose **${String(choices[rand])}**`)
+			.setDescription(`<@${interaction.user.id}>, I choose **${String(choices[randomIndex])}**`)
 			.setColor('Blue')
 		interaction.reply({ embeds: [choiceEmbed] })
 	}
