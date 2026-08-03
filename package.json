@@ -22,27 +22,27 @@
   "homepage": "https://github.com/hyw-ell/Europa-Bot-TS#readme",
   "dependencies": {
     "@google-cloud/translate": "^9.4.2",
-    "axios": "^1.18.0",
+    "axios": "^1.18.1",
     "canvas": "^3.2.3",
-    "discord.js": "^14.26.4",
+    "discord.js": "^14.27.0",
     "dotenv": "^17.4.2",
-    "google-auth-library": "^10.7.0",
+    "google-auth-library": "^10.9.0",
     "google-spreadsheet": "^5.3.0",
     "html-entities": "^2.6.0",
     "md5": "^2.3.0",
-    "node-cron": "^4.3.0",
+    "node-cron": "^4.6.0",
     "octokit": "^5.0.5",
-    "puppeteer": "^25.1.0",
+    "puppeteer": "^25.3.0",
     "string-similarity": "^4.0.4",
     "urlencode": "^2.0.0",
-    "uuid": "^14.0.0"
+    "uuid": "^14.0.1"
   },
   "devDependencies": {
     "@types/md5": "^2.3.6",
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.1.1",
     "@types/node-cron": "^3.0.11",
     "@types/string-similarity": "^4.0.2",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "overrides": {
     "undici": "^6.27.0"
