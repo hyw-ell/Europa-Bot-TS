@@ -13,7 +13,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
     const playerEmbed = new EmbedBuilder()
         .setColor('Blue')
         .setAuthor({ name: 'Player Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
-        .setTitle('Fetching Player Profile <a:loading:763160594974244874>')
+        .setTitle('Fetching Player Profile <a:loading:1543822841953128549>')
     interaction.editReply({ embeds: [playerEmbed], components: [] })
 
     // Access the Player profile page
@@ -40,7 +40,7 @@ export async function loadProfile(interaction: ChatInputCommandInteraction, play
 
     const name = bodyHTML.match(/(?<=<span\sclass="txt-other-name">).+(?=<\/span>)/)?.toString()
 
-    playerEmbed.setTitle('Drawing Player Profile and Support Summons <a:loading:763160594974244874>')
+    playerEmbed.setTitle('Drawing Player Profile and Support Summons <a:loading:1543822841953128549>')
     interaction.editReply({embeds: [playerEmbed]})
 
     // Reformat the page for the screenshot

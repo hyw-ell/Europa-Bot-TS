@@ -120,7 +120,7 @@ export function drawStars(ctx: CanvasRenderingContext2D, spacing: number, size: 
  */
 export async function findPlayer(interaction: ChatInputCommandInteraction, playerName: string) {
     const searchEmbed = new EmbedBuilder()
-        .setTitle(`Searching for "${playerName}" <a:loading:763160594974244874>`)
+        .setTitle(`Searching for "${playerName}" <a:loading:1543822841953128549>`)
         .setColor('Blue')
         .setAuthor({
             name: 'Player Search',

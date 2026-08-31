@@ -9,7 +9,7 @@ export async function loadCrew(interaction: ChatInputCommandInteraction, crew: c
     if (!browser?.connected) await startPuppeteer()
     
     const crewEmbed = new EmbedBuilder()
-        .setTitle('Loading Crew Page <a:loading:763160594974244874>')
+        .setTitle('Loading Crew Page <a:loading:1543822841953128549>')
         .setColor('Blue')
         .setAuthor({ name: 'Crew Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
         .setFooter({

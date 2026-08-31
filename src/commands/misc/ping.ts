@@ -7,7 +7,7 @@ export const command = {
 	,
 	async execute(interaction: ChatInputCommandInteraction) {
 		const time = Date.now()
-		await interaction.reply('Pinging <a:loading:763160594974244874>')
+		await interaction.reply('Pinging <a:loading:1543822841953128549>')
 		await interaction.editReply(`Pong! - Time: **${Math.abs(interaction.createdTimestamp - time)}ms**`)
 	}
 }

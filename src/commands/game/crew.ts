@@ -27,7 +27,7 @@ export const command = {
 		const crewID = interaction.options.getNumber('id')?.toString()
 
 		const crewEmbed = new EmbedBuilder()
-			.setTitle(`Searching for ${crewName ?? crewID} <a:loading:763160594974244874>`)
+			.setTitle(`Searching for ${crewName ?? crewID} <a:loading:1543822841953128549>`)
 			.setColor('Blue')
 			.setAuthor({ name: 'Crew Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
 			.setFooter({

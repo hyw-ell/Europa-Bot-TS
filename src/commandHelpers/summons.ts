@@ -10,7 +10,7 @@ export async function loadSummons(interaction: ChatInputCommandInteraction, play
     const playerEmbed = new EmbedBuilder()
         .setColor('Blue')
         .setAuthor({ name: 'Player Search', iconURL: IMAGE_URLS['Granblue_Fantasy_Logo.png'] })
-        .setTitle('Fetching Support Summons <a:loading:763160594974244874>')
+        .setTitle('Fetching Support Summons <a:loading:1543822841953128549>')
     interaction.editReply({embeds: [playerEmbed], components: []})
 
     // Access the Player profile page
@@ -31,7 +31,7 @@ export async function loadSummons(interaction: ChatInputCommandInteraction, play
 
 	page.close()
 
-	playerEmbed.setTitle('Drawing Support Summons <a:loading:763160594974244874>')
+	playerEmbed.setTitle('Drawing Support Summons <a:loading:1543822841953128549>')
     interaction.editReply({embeds: [playerEmbed]})
 
     const name = bodyHTML.match(/(?<=<span\sclass="txt-other-name">).+(?=<\/span>)/)?.toString()

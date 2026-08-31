@@ -13,7 +13,7 @@ export const command = {
 			return interaction.reply({content: 'You do not have permission to use this command.', ephemeral: true})
 		}
 		
-		await interaction.reply('Connecting to Database <a:loading:763160594974244874>')
+		await interaction.reply('Connecting to Database <a:loading:1543822841953128549>')
 		await connectDatabase()
 		await registerCommands()
 		interaction.editReply('Database Connection Successful.')
