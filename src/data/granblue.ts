@@ -1,28 +1,29 @@
 export const languageCookie = { name: 'ln', value: '2', domain: 'game.granbluefantasy.jp' }
 export const accessCookie = { name: 'wing', value: process.env.GBF_WING!, domain: 'game.granbluefantasy.jp' }
 
-export const rarityFullNames: {[key: string]: 'SS Rare' | 'S Rare' | 'Rare' | 'Normal'} = {
+export const rarityFullNames = {
     'SSR': 'SS Rare',
     'SR': 'S Rare',
     'R': 'Rare',
     'N': 'Normal'
-}
+} as const
 
-export const rarityEmotes: {[key: string]: string} = {
-    'SS Rare': '<:SSR:755671138624864266> ',
-    'S Rare': '<:SR:755671130882179113> ',
-    'Rare': '<:R_:755671123588546623> '
-}
+export const rarityEmotes = {
+    'SS Rare': '<:SSR:1543809314349908059> ',
+    'S Rare': '<:SR:1543809315197165578> ',
+    'Rare': '<:R_:1543809313204740096> ',
+    'Normal': '<:Normal:1543817674600091728>'
+} as const
 
-export const weaponEmotes: {[key: string]: string} = {
-    'Sabre': '<:Sabre:755661280332742699> ',
-    'Dagger': '<:Dagger:755667404784140348> ',
-    'Spear': '<:Spear:755662079846776933> ',
-    'Axe': '<:Axe:755668293632917564> ',
-    'Staff': '<:Staff:755662292254851093> ',
-    'Gun': '<:Gun:755668506300776520> ',
-    'Melee': '<:Melee:755668026023477339> ',
-    'Bow': '<:Bow:755662696745009194> ',
-    'Harp': '<:Harp:755662500250386433> ',
-    'Katana': '<:Katana:755661824925499442> '
-}
+export const weaponEmotes = {
+    'Sabre': '<:Sabre:1543809331714195556> ',
+    'Dagger': '<:Dagger:1543809318921441382> ',
+    'Spear': '<:Spear:1543809323128328233> ',
+    'Axe': '<:Axe:1543809316954447943> ',
+    'Staff': '<:Staff:1543809322058907759> ',
+    'Gun': '<:Gun:1543809316128297010> ',
+    'Melee': '<:Melee:1543809317856350308> ',
+    'Bow': '<:Bow:1543809319877746741> ',
+    'Harp': '<:Harp:1543809321018851420> ',
+    'Katana': '<:Katana:1543809324114251816> '
+} as const

@@ -36,7 +36,7 @@ export async function getCharacterData(retries: number = 1) {
     await database.charactersTable.addRows(
         characters.map(({name, rarity, series, obtain, weaponName, ...characterData}) => ({
             name: decode(name),
-            rarity: rarityFullNames[rarity],
+            rarity: rarity,
             series: decode(series),
             obtain: decode(obtain[0]),
             weaponName: decode(weaponName),

@@ -30,7 +30,7 @@ export const command = {
 		rateUpItems.slice(0,25).forEach(item => {
 			const featured = featuredItemIDs.includes(item.id)
 			const description = item.type === 'Summon'
-				? '<:SummonCradle:753364568138317914> Summon'
+				? '<:SummonCradle:1543812289604354068> Summon'
 				: item.character
 					? `👤 ${item.character}`
 					: weaponEmotes[item.type] + 'Weapon'

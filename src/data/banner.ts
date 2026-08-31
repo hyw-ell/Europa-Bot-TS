@@ -1,3 +1,5 @@
+import { rarityEmotes, weaponEmotes } from './granblue.js'
+
 export type rawItem = {
     name: string
     drop_rate: string
@@ -13,9 +15,9 @@ export type rawItem = {
 export type item = {
     name: string
     id: string
-    rarity: string
+    rarity: keyof typeof rarityEmotes
     element: string
-    type: string
+    type: 'Summon' | keyof typeof weaponEmotes
     rate1: number
     rate2: number
     cum_rate1: number

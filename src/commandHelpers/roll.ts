@@ -99,15 +99,15 @@ export function createGachaEmbed(items: item[], target?: item, modifier?: 'gacha
     
     for (let i = 0; i < totalRolls; i++){
         if (i >= 23){
-            const remainingSSRs = `<:SSR:755671138624864266> ${items.filter(item => item.rarity === 'SS Rare').length}`
-            const remainingSRs = `<:SR:755671130882179113> ${items.filter(item => item.rarity === 'S Rare').length}`
-            const remainingRs = `<:R_:755671123588546623> ${items.filter(item => item.rarity === 'Rare').length}`
+            const remainingSSRs = `${rarityEmotes['SS Rare']} ${items.filter(item => item.rarity === 'SS Rare').length}`
+            const remainingSRs = `${rarityEmotes['S Rare']} ${items.filter(item => item.rarity === 'S Rare').length}`
+            const remainingRs = `${rarityEmotes['Rare']} ${items.filter(item => item.rarity === 'Rare').length}`
             rollEmbed.addFields({name: `and ${items.length} more...`, value: `**${remainingSSRs}** | **${remainingSRs}** | **${remainingRs}**`, inline: true})
             break
         } else {
             const item = items.shift()!
             const description = item.type === 'Summon'
-                ? '<:SummonCradle:753364568138317914> Summon'
+                ? '<:SummonCradle:1543812289604354068> Summon'
                 : item.character
                     ? `👤 ${item.character}`
                     : weaponEmotes[item.type] + 'Weapon'

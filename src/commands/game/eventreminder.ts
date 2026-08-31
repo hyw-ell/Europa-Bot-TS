@@ -43,7 +43,7 @@ export const command = {
 	,
 	async execute(interaction: ChatInputCommandInteraction) {
         if (!database.variables[1].get('value').includes(interaction.user.id)) {
-            return interaction.reply('Sorry, this command is not available yet <:blue:725143925396078643>')
+            return interaction.reply('Sorry, this command is not available yet <:blue:1543813039470682253>')
         }
 
         const command = interaction.options.getSubcommand()

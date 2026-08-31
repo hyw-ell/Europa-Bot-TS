@@ -178,7 +178,7 @@ export const command = {
 		// Sends a congratulatory message when the user saves up a spark (a set of 300 rolls)
 		const sparkPercent = user.get('rolls')/300
 		if (Math.floor(sparkPercent) - Math.floor(initialRolls/300) >= 1) {
-			interaction.followUp(`<:mogumogu:563695725951582239>  <:narulove:585534241459273728>  🎊 Congratulations! You've saved up ${Math.floor(sparkPercent)} spark${Math.floor(sparkPercent) > 1 ? 's' : ''}! 🎊 <:blue:725143925396078643> <:SatThumb:585533971178324049>`)
+			interaction.followUp(`<:mogumogu:1543813040661598278>  <:narulove:1543813041303593001>  🎊 Congratulations! You've saved up ${Math.floor(sparkPercent)} spark${Math.floor(sparkPercent) > 1 ? 's' : ''}! 🎊 <:blue:1543813039470682253> <:SatThumb:1543813042557427722>`)
 		}
 
 		// Nickname Auto-Updater

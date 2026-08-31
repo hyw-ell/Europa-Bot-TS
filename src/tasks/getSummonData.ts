@@ -35,7 +35,7 @@ export async function getSummonData(retries: number = 1) {
     await database.summonsTable.addRows(
         summons.map(({name, rarity, element, series, obtain, ...summonData}) => ({
             name: decode(name),
-            rarity: rarityFullNames[rarity],
+            rarity: rarity,
             element: capFirstLetter(element),
             series: decode(series),
             obtain: decode(obtain),

@@ -121,11 +121,11 @@ export function getEmbedProfile(user: GoogleSpreadsheetRow<userData>, discordUse
         sparkEmbed
             .addFields([
                 {
-                    name: '<:Crystal:616792937161949189> Crystals:⠀   ⠀<:Ticket:616792937254092800> Tickets:⠀   ⠀<:10Ticket:616792937220669450> 10 Parts:', 
+                    name: '<:Crystal:1543810647446519918> Crystals:⠀   ⠀<:Ticket:1543810648293646397> Tickets:⠀   ⠀<:10Ticket:1543811056537960489> 10 Parts:', 
                     value: `${crystalBlank + crystals + crystalBlank}${ticketBlank + tickets + ticketBlank}${tenticketBlank + tenParts}`
                 },
-                { name: '⠀⠀⠀⠀⠀⠀⠀⠀⠀<:Spark:622196123695710208> Rolls/Sparks:', value: sparkBlank + rolls, inline: false },
-                { name: `⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:585534348695044199>`, value: `⠀[${progBar}]` }
+                { name: '⠀⠀⠀⠀⠀⠀⠀⠀⠀<:Spark:1543810710130401391> Rolls/Sparks:', value: sparkBlank + rolls, inline: false },
+                { name: `⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:1543813044616953928>`, value: `⠀[${progBar}]` }
             ])
     } else {
         for (let i = 0; i < 6 - crystals.length / 2; i++) { crystalBlank += blank }
@@ -135,13 +135,13 @@ export function getEmbedProfile(user: GoogleSpreadsheetRow<userData>, discordUse
         
         sparkEmbed
             .addFields([
-                { name: '⠀⠀<:Crystal:616792937161949189> Crystals:', value: crystalBlank + crystals, inline: true },
-                { name: '⠀⠀⠀⠀<:Ticket:616792937254092800> Tickets:', value: ticketBlank + tickets, inline: true },
-                { name: '⠀<:10Ticket:616792937220669450> 10 Part Tickets: ⠀', value: tenticketBlank + tenParts, inline: true },
+                { name: '⠀⠀<:Crystal:1543810647446519918> Crystals:', value: crystalBlank + crystals, inline: true },
+                { name: '⠀⠀⠀⠀<:Ticket:1543810648293646397> Tickets:', value: ticketBlank + tickets, inline: true },
+                { name: '⠀<:10Ticket:1543811056537960489> 10 Part Tickets: ⠀', value: tenticketBlank + tenParts, inline: true },
                 { name: '\u200B', value: '\u200B', inline: true },
-                { name: '⠀⠀<:Spark:622196123695710208> Rolls/Sparks:', value: sparkBlank + rolls, inline: true },
+                { name: '⠀⠀<:Spark:1543810710130401391> Rolls/Sparks:', value: sparkBlank + rolls, inline: true },
                 { name: '\u200B', value: '\u200B', inline: true },
-                { name: `⠀⠀⠀⠀⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:585534348695044199>`, value: `⠀ ⠀ ⠀⠀[${progBar}]` }
+                { name: `⠀⠀⠀⠀⠀⠀You are ${round(sparkPercent * 100)}% of the way to a spark! <:Stronk:1543813044616953928>`, value: `⠀ ⠀ ⠀⠀[${progBar}]` }
             ])
     }
 
