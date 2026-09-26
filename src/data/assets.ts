@@ -2,7 +2,7 @@ import { loadImage } from 'canvas'
 import { getAllFilePaths } from '../utils/filesystem.js'
 import path from 'path'
 
-const imageFilePaths = getAllFilePaths('./assets', 'png')
+const imageFilePaths = getAllFilePaths('./assets', 'png').filter(p => !/archive/i.test(p))
 const imagePromises = imageFilePaths.map(f => loadImage(f))
 const resolvedImages = await Promise.all(imagePromises)
 
