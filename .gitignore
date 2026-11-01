@@ -1,4 +1,5 @@
 .env
 node_modules
 prod
+pnpm-workspace.yaml
 *test*
