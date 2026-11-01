@@ -5,9 +5,8 @@ export let browser: Browser
 export async function startPuppeteer() {
 	browser = await launch({
 		args: [
-			'--single-process', // Do not use --single-process on Windows
 			'--no-zygote',
-			'--no-sandbox'
+			'--no-sandbox',
 		]
 	})
 	console.log(`Puppeteer browser launched for Shard #${THIS_SHARD_ID}`)
